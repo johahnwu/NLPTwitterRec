@@ -28,7 +28,7 @@ import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 public final class StreamToFiles {
-	public static final long NUM_TWEETS = 500;
+	public static final long NUM_TWEETS = 1000000;
 	public static int fileNumber = 1;
 	public static String outFile;
 
@@ -57,7 +57,7 @@ public final class StreamToFiles {
 				if (status.getText().contains("#")) {
 					Utils.sanitizeAndWriteTweet(status.getText(), outputWriter);
 					counter++;
-					if (counter % 10 == 0) {
+					if (counter % 1000 == 0) {
 						System.out.println("done with " + counter);
 					}
 					if (counter >= NUM_TWEETS) {
