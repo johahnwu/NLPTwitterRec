@@ -1,0 +1,13 @@
+run
+
+#Eclipse Projects
+.project
+.classpath
+.settings
+.metadata
+
+/bin/
+
+#Stuff I defined
+*.auth
+*.command
