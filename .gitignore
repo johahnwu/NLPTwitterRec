@@ -6,8 +6,6 @@ run
 .settings
 .metadata
 
-/bin/
-
 #Stuff I defined
 *.auth
 *.command

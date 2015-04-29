@@ -1,0 +1,5 @@
+To compile:
+./compile_code
+
+example run:
+java -cp ark-tweet-nlp-0.3.2.jar:bin pos/tagger/TwitterPOSTagger inputFile examples/example_tweets.txt --outputFile random_output
