@@ -1,4 +1,5 @@
 package io;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,8 +12,14 @@ public class InputFileReader {
 	private BufferedReader currentReader;
 
 	public InputFileReader() {
+		this(null);
+	}
+
+	public InputFileReader(File file) {
 		filesToRead = new LinkedList<File>();
 		currentReader = null;
+		if (file != null)
+			addFileSystem(file);
 	}
 
 	public void addFileSystem(File file) {

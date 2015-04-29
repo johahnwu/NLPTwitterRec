@@ -16,13 +16,7 @@
  * Modified Matthew Lau 2015
  */
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import twitter4j.Query;
@@ -35,7 +29,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Search {
 
-	public static final String HASHTAG_DELIMITER = "###";
+	public static final String dict12AnnotationsRegex = "[:&#<^=+]";
 
 	public static void main(String[] args) {
 		if (args.length < 1) {
@@ -46,7 +40,7 @@ public class Search {
 
 		String oAuthFileName = "mjlauKeys.auth";
 
-		ConfigurationBuilder cb = createConfigurationBuilder(new File(
+		ConfigurationBuilder cb = Utils.createConfigurationBuilder(new File(
 				oAuthFileName));
 		if (cb == null) {
 			throw new IllegalArgumentException("Configuration File Issues");
@@ -75,45 +69,4 @@ public class Search {
 		}
 	}
 
-	private static void sanitizeAndWriteTweet(String tweet, PrintWriter pw) {
-		List<String> hashtags = new ArrayList<String>();
-		String[] splitWords = tweet.split(" ");
-		for (String word : splitWords) {
-			if (word.startsWith("#")) {
-				word = word.substring(1);
-				hashtags.add(word);
-			}
-			pw.print(word + " ");
-		}
-		pw.write(HASHTAG_DELIMITER);
-		for (String ht : hashtags) {
-			pw.print(ht + " ");
-		}
-		pw.println();
-	}
-
-	private static ConfigurationBuilder createConfigurationBuilder(
-			File oAuthFile) {
-		try (BufferedReader fileReader = new BufferedReader(new FileReader(
-				oAuthFile))) {
-			ConfigurationBuilder cb = new ConfigurationBuilder();
-			cb.setDebugEnabled(true).setOAuthConsumerKey(fileReader.readLine())
-					.setOAuthConsumerSecret(fileReader.readLine())
-					.setOAuthAccessToken(fileReader.readLine())
-					.setOAuthAccessTokenSecret(fileReader.readLine());
-			return cb;
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.err.println("Configuration File not found.");
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err
-					.println("Configuration file formatted badly, should be \n"
-							+ "oAuthConsumerKey \noAuthConsumerSecret \noAuthAccessToken \noAuthAccessTokenSecret");
-			e.printStackTrace();
-		}
-		return null;
-	}
 }
