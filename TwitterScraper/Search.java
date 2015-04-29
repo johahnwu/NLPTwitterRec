@@ -12,6 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * Modified Matthew Lau 2015
  */
 
 import java.io.BufferedReader;
@@ -19,6 +21,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import twitter4j.Query;
@@ -29,17 +33,10 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
-/**
- * @author Yusuke Yamamoto - yusuke at mac.com
- * @since Twitter4J 2.1.7
- */
 public class Search {
-	/**
-	 * Usage: java twitter4j.examples.search.SearchTweets [query]
-	 *
-	 * @param args
-	 *            search query
-	 */
+
+	public static final String HASHTAG_DELIMITER = "###";
+
 	public static void main(String[] args) {
 		if (args.length < 1) {
 			System.out
@@ -76,6 +73,23 @@ public class Search {
 			System.out.println("Failed to search tweets: " + te.getMessage());
 			System.exit(-1);
 		}
+	}
+
+	private static void sanitizeAndWriteTweet(String tweet, PrintWriter pw) {
+		List<String> hashtags = new ArrayList<String>();
+		String[] splitWords = tweet.split(" ");
+		for (String word : splitWords) {
+			if (word.startsWith("#")) {
+				word = word.substring(1);
+				hashtags.add(word);
+			}
+			pw.print(word + " ");
+		}
+		pw.write(HASHTAG_DELIMITER);
+		for (String ht : hashtags) {
+			pw.print(ht + " ");
+		}
+		pw.println();
 	}
 
 	private static ConfigurationBuilder createConfigurationBuilder(

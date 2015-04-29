@@ -8,4 +8,9 @@ or run
 To Execute:
 java -cp twitter4j-core-4.0.3.jar:. Search [arguments]
 
-
+Note for Search:
+Need to specifiy the oAuthFileName with a file in the format:
+[TwitterConsumerKey] \
+[TwitterConsumerSecret] \
+[TwitterAuthAccessToken] \
+[TwitterAuthAccessTokenSecret]

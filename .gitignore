@@ -1,5 +1,7 @@
 run
 
+.recommenders
+
 #Eclipse Projects
 .project
 .classpath

@@ -1,6 +1,5 @@
 package pos.tagger;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -86,7 +85,7 @@ public class TwitterPOSTagger {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String inputFile = "random_input";
+		String inputFile = "examples/random_input";
 		String outputFile = "random_output";
 		String modelFile = PENN_MODEL;
 
