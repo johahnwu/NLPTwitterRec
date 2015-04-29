@@ -1,0 +1,11 @@
+To Compile:
+
+javac -cp twitter4j-core-4.0.3.jar *.java
+
+or run
+./compile_code
+
+To Execute:
+java -cp twitter4j-core-4.0.3.jar:. Search [arguments]
+
+

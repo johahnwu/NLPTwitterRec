@@ -1,0 +1,3 @@
+echo "starting compiling!"
+javac -cp twitter4j-core-4.0.3.jar *.java
+echo "done compiling!"

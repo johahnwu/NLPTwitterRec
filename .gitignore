@@ -11,3 +11,9 @@ run
 #Stuff I defined
 *.auth
 *.command
+
+#vim
+*.swp
+
+#mac stuff
+*.DS_Store
