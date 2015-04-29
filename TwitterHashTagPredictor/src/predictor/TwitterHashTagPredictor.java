@@ -1,4 +1,4 @@
-package predicter;
+package predictor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,15 +9,15 @@ import pos.predictor.POSPredictionModel;
 import pos.tagger.TaggedWord;
 import pos.tagger.TwitterPOSTagger;
 
-public class TwitterHashTagPredicter {
+public class TwitterHashTagPredictor {
 	private TwitterPOSTagger posTagger;
 	private POSPredictionModel predictionModel;
 
-	public TwitterHashTagPredicter() throws IOException {
+	public TwitterHashTagPredictor() throws IOException {
 		this(TwitterPOSTagger.PENN_MODEL);
 	}
 
-	public TwitterHashTagPredicter(String modelPOSFile) throws IOException {
+	public TwitterHashTagPredictor(String modelPOSFile) throws IOException {
 		posTagger = new TwitterPOSTagger(modelPOSFile);
 		predictionModel = new POSPredictionModel();
 	}

@@ -1,4 +1,4 @@
-package predicter;
+package predictor;
 
 public class HashTagPrediction implements Comparable<HashTagPrediction>{
 	String hashtag;
