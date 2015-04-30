@@ -42,27 +42,19 @@ public class Utils {
 		for (String word : splitWords) {
 			word = word.toLowerCase();
 			if (word.contains("#")) {
-				// This deals with the fact that the hashtag might be in the
-				// middle
 				String[] words = word.split("#");
-				for (int i = 0; i < words.length; i++) {
+				if (words[0].length() > 0)
+					pw.print(words[0] + " ");
+				for (int i = 1; i < words.length; i++) {
 					word = words[i];
-					// if the hashtag is at the beginning then the first will be
-					// a string of length 0
-					// otherwise the hashtag appears in the middle of the word
-					if (i == 0 && word.length() > 0)
-						pw.print(word + " ");
-					else {
-						pw.print(word + " ");
-						hashtags.add(word);
-					}
-
+					pw.print(word + " ");
+					hashtags.add(word);
 				}
 			} else {
 				pw.print(word + " ");
 			}
 		}
-		pw.write(HASHTAG_DELIMITER);
+		pw.write(HASHTAG_DELIMITER + " ");
 		for (String ht : hashtags) {
 			pw.print(ht + " ");
 		}
