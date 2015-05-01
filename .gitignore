@@ -4,6 +4,7 @@ run
 */log
 */condor_files
 */trainingSet1
+*/bin
 
 #Eclipse Projects
 .project

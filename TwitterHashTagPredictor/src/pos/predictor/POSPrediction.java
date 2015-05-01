@@ -2,7 +2,7 @@ package pos.predictor;
 
 import io.InputFileReader;
 
-public class POSPredictionModelTrainer {
+public class POSPrediction {
 	public POSPredictionModel trainModel(InputFileReader reader){
 		return null;
 	}

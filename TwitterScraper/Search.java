@@ -16,11 +16,17 @@
  * Modified Matthew Lau 2015
  */
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
+import twitter4j.RateLimitStatus;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -29,9 +35,51 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Search {
 
-	public static final String dict12AnnotationsRegex = "[:&#<^=+]";
+	public static final String SEARCH_ENDPOINT = "/search/tweets";
 
-	public static void main(String[] args) {
+	private Twitter twitter;
+
+	public Search(ConfigurationBuilder cb) {
+		TwitterFactory tf = new TwitterFactory(cb.build());
+		twitter = tf.getInstance();
+	}
+
+	public int SearchAndWriteKResults(String queryText, int k, PrintWriter pw)
+			throws TwitterException {
+		try {
+
+			Query query = new Query(queryText);
+			query.setLang("en");
+			QueryResult result;
+			int counter = 0;
+			do {
+				result = twitter.search(query);
+				List<Status> tweets = result.getTweets();
+				for (Status tweet : tweets) {
+					Utils.sanitizeAndWriteTweet(tweet.getText(), pw);
+					counter++;
+					if (counter == k)
+						return 0;
+				}
+				return 0;
+			} while ((query = result.nextQuery()) != null);
+		} catch (TwitterException te) {
+			if (te.exceededRateLimitation()) {
+				RateLimitStatus currentStatus = twitter.getRateLimitStatus(
+						"search").get(SEARCH_ENDPOINT);
+				return currentStatus.getSecondsUntilReset();
+			} else {
+				te.printStackTrace();
+				System.exit(-1);
+			}
+
+		}
+		return -1;
+
+	}
+
+	public static void main(String[] args) throws InterruptedException,
+			TwitterException {
 		if (args.length < 1) {
 			System.out
 					.println("java twitter4j.examples.search.SearchTweets [query]");
@@ -46,27 +94,46 @@ public class Search {
 			throw new IllegalArgumentException("Configuration File Issues");
 		}
 
-		TwitterFactory tf = new TwitterFactory(cb.build());
-		Twitter twitter = tf.getInstance();
-		try {
-			Query query = new Query(args[0]);
-			query.setLang("en");
-			QueryResult result;
-			do {
-				result = twitter.search(query);
-				List<Status> tweets = result.getTweets();
-				System.out.println(tweets.size());
-				for (Status tweet : tweets) {
-					System.out.println("@" + tweet.getUser().getScreenName()
-							+ " - " + tweet.getText());
+		String inputFile = "dictionary/chosen_words";
+		String outputFile = "tweetSet";
+		int numTweetsPerHashTag = 50;
+		int index = 0;
+		while (index < args.length) {
+			if (args[index].equalsIgnoreCase("--inputFile")) {
+				inputFile = args[index + 1];
+				index += 2;
+			} else if (args[index].equalsIgnoreCase("--outputFile")) {
+				outputFile = args[index + 1];
+				index += 2;
+			} else if (args[index].equalsIgnoreCase("--tweets")) {
+				numTweetsPerHashTag = Integer.valueOf(args[index + 1]);
+				index += 2;
+			} else {
+				index += 1;
+			}
+		}
+
+		Search search = new Search(cb);
+		try (BufferedReader reader = new BufferedReader(new FileReader(
+				inputFile));
+				PrintWriter writer = new PrintWriter(new File(outputFile))) {
+			String word = "";
+			while ((word = reader.readLine()) != null) {
+				int timeLeft = search.SearchAndWriteKResults("#" + word,
+						numTweetsPerHashTag, writer);
+				if (timeLeft > 0) {
+					System.out.println("sleeping for " + timeLeft + " seconds");
+					Thread.sleep(timeLeft * 1000);
 				}
-			} while ((query = result.nextQuery()) != null);
-			System.exit(0);
-		} catch (TwitterException te) {
-			te.printStackTrace();
-			System.out.println("Failed to search tweets: " + te.getMessage());
-			System.exit(-1);
+				System.out.println("done with #" + word);
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-
 }
