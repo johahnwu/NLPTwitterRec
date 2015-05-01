@@ -1,6 +1,9 @@
 run
 
 .recommenders
+*/log
+*/condor_files
+*/trainingSet1
 
 #Eclipse Projects
 .project
