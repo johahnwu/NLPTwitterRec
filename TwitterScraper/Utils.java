@@ -40,10 +40,10 @@ public class Utils {
 		List<String> hashtags = new ArrayList<String>();
 		String[] splitWords = tweet.split("\\s+");
 		for (String word : splitWords) {
-			word = word.toLowerCase();
+			// word = word.toLowerCase();
 			if (word.contains("#")) {
 				String[] words = word.split("#");
-				if (words[0].length() > 0)
+				if (words.length > 0 && words[0].length() > 0)
 					pw.print(words[0] + " ");
 				for (int i = 1; i < words.length; i++) {
 					word = words[i];
@@ -59,5 +59,9 @@ public class Utils {
 			pw.print(ht + " ");
 		}
 		pw.println();
+	}
+
+	public static String sanitizeToHashTag(String ht) {
+		return ht.replaceAll("\\W", "").toLowerCase();
 	}
 }
