@@ -119,7 +119,7 @@ public class Search {
 				PrintWriter writer = new PrintWriter(new File(outputFile))) {
 			String word = "";
 			while ((word = reader.readLine()) != null) {
-				int timeLeft = search.SearchAndWriteKResults("#" + word,
+				int timeLeft = search.SearchAndWriteKResults("#" + word+" -RT",
 						numTweetsPerHashTag, writer);
 				if (timeLeft > 0) {
 					System.out.println("sleeping for " + timeLeft + " seconds");

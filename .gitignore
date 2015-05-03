@@ -5,6 +5,7 @@ run
 */condor_files
 */trainingSet1
 */bin
+*/data
 
 #Eclipse Projects
 .project
@@ -15,6 +16,7 @@ run
 #Stuff I defined
 *.auth
 *.command
+*.class
 
 #vim
 *.swp

@@ -26,6 +26,7 @@ public class WordChooser {
 				}
 			}
 			int counter = 0;
+      System.out.println(dictionary.size());
 			while (counter < numWords && !dictionary.isEmpty()) {
 				int randomIndex = (int) (Math.random() * dictionary.size());
 				writer.println(dictionary.remove(randomIndex));
