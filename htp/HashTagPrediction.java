@@ -15,7 +15,7 @@ import java.util.TreeMap;
 
 public class HashTagPrediction {
 	
-	String trainingTweetPath = "examples.txt"; 
+	String trainingTweetPath = "poemTags.txt"; 
 	String testingTweetPath = "examplesTest.txt"; 
 	String tweetHashDelim = "###"; 
 	int defaultTopK = 10; 
@@ -55,7 +55,7 @@ public class HashTagPrediction {
 		numTweets = trainingTweets.size(); 
 		for (String line: trainingTweets){
 			String[] tweetAndHash = line.split(tweetHashDelim); 
-			System.out.println(tweetAndHash[1]); 
+			//System.out.println(tweetAndHash[1]); 
 			if(tweetAndHash.length == 2){
 				//Create the three datastructures. 
 				//TODO Porter Stemming
@@ -69,6 +69,7 @@ public class HashTagPrediction {
 				//for thfm
 				HashSet<String> wordsAddedToIdf = new HashSet<String>();  
 				for (String word: wordsInSentence){
+					System.out.println(thfm.size()); 
 					HashMap<String, Integer> wordHashTagFreq; 
 					if(thfm.containsKey(word)){
 						wordHashTagFreq = thfm.get(word);
@@ -77,6 +78,9 @@ public class HashTagPrediction {
 						wordHashTagFreq = new HashMap<String, Integer>(); 
 					}
 					for(String ht: hashtags){
+						if (ht.trim().length() <= 0){
+							continue; 
+						}
 						if(wordHashTagFreq.containsKey(ht)){
 							wordHashTagFreq.put(ht, wordHashTagFreq.get(ht) + 1); 
 						}
@@ -84,7 +88,7 @@ public class HashTagPrediction {
 							wordHashTagFreq.put(ht, 1); 
 						}
 					}
-					
+					thfm.put(word, wordHashTagFreq); 
 					//for idf 
 					if(!wordsAddedToIdf.contains(word)){
 						wordsAddedToIdf.add(word); 
@@ -99,6 +103,9 @@ public class HashTagPrediction {
 				
 				//for hfm
 				for(String ht: hashtags){
+					if (ht.trim().length() <= 0){
+							continue; 
+						}
 					HashSet<String> wordsAssociatedWithHash;
 					if(hfm.containsKey(ht)){
 						wordsAssociatedWithHash = hfm.get(ht); 
@@ -150,8 +157,10 @@ public class HashTagPrediction {
 		String[] wordsInSentence = tweet.split("\\s+");
 		HashMap<String, Double> recHashTags = new HashMap<String, Double>(); 
 		for (String word: wordsInSentence){
+			//what if word doesn't exist in idf?
 			double idfVal = Math.log(numTweets *1.0 / idf.get(word)); 
 			//loop through all hashtags co-occuring with word
+			//what if word doens't exist in thfm?
 			HashMap<String, Integer> hashAssocWithWordAsMap = thfm.get(word); 
 			int totalHashTagFreq = 0; 
 			for (Integer freq : hashAssocWithWordAsMap.values()){

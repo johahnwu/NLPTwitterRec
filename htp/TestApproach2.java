@@ -7,6 +7,8 @@ public class TestApproach2{
        //TODO set paths
        predictor.setDeliminator("###"); 
        predictor.train(); 
-
+       //ModelHelp.printTHFM(predictor.thfm); 
+       //ModelHelp.printHFM(predictor.hfm); 
+       ModelHelp.printIDF(predictor.idf); 
     }
 }
