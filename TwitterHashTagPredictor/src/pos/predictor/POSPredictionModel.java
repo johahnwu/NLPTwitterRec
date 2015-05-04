@@ -1,4 +1,5 @@
 package pos.predictor;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +14,7 @@ import pos.tagger.TaggedWord;
 public class POSPredictionModel {
 
 	private Map<String, Double> posTagMultipliers;
+	public static final String START_TAG = " <S>";
 	public static final String NO_MODEL_FILE = "models/pos_nomodel";
 
 	public POSPredictionModel() {
@@ -21,7 +23,7 @@ public class POSPredictionModel {
 
 	public POSPredictionModel(String modelFileName) {
 		posTagMultipliers = new HashMap<String, Double>();
-		if(modelFileName != null)
+		if (modelFileName != null)
 			loadModel(modelFileName);
 	}
 
@@ -91,6 +93,10 @@ public class POSPredictionModel {
 
 	private double interpolateConfidence(double d) {
 		return .5 + .5 * d;
+	}
+
+	public static String concatWordsWithDelimiter(String a, String b) {
+		return a + "/" + b;
 	}
 
 	public static void main(String[] args) {

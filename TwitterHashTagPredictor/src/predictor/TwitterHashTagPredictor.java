@@ -1,17 +1,24 @@
 package predictor;
 
+import io.Utils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import pos.predictor.POSPredictionModel;
 import pos.tagger.TaggedWord;
 import pos.tagger.TwitterPOSTagger;
 
 public class TwitterHashTagPredictor {
+	public static final double UNIGRAM_INT = 0.5;
+	public static final double BIGRAM_INT = 0.5;
+
 	private TwitterPOSTagger posTagger;
 	private POSPredictionModel predictionModel;
+	private Map<String, Double> posProbabilities;
 
 	public TwitterHashTagPredictor() throws IOException {
 		this(TwitterPOSTagger.PENN_MODEL);
@@ -20,6 +27,7 @@ public class TwitterHashTagPredictor {
 	public TwitterHashTagPredictor(String modelPOSFile) throws IOException {
 		posTagger = new TwitterPOSTagger(modelPOSFile);
 		predictionModel = new POSPredictionModel();
+		posProbabilities = predictionModel.getModel();
 	}
 
 	/**
@@ -36,11 +44,24 @@ public class TwitterHashTagPredictor {
 		List<HashTagPrediction> hashTagPredictions = new ArrayList<HashTagPrediction>();
 
 		List<TaggedWord> taggedWords = posTagger.tagSentence(tweet);
+		String previousPOS = POSPredictionModel.START_TAG;
 		for (TaggedWord tw : taggedWords) {
 			HashTagPrediction currentPrediction = new HashTagPrediction();
-			currentPrediction.hashtag = tw.word;
-			currentPrediction.confidence = predictionModel
-					.calculateConfidence(tw);
+			currentPrediction.hashtag = Utils.sanitizeWordToHashTag(tw.word);
+			String unigramPOS = tw.pos;
+			String bigramPOS = POSPredictionModel.concatWordsWithDelimiter(
+					previousPOS, unigramPOS);
+			double unigramProb = 0.0;
+			if (posProbabilities.containsKey(unigramPOS)) {
+				unigramProb = posProbabilities.get(unigramPOS);
+			}
+			double bigramProb = 0.0;
+			if (posProbabilities.containsKey(bigramPOS)) {
+				bigramProb = posProbabilities.get(bigramPOS);
+			}
+			double interpolatedProbs = unigramProb * UNIGRAM_INT + bigramProb
+					* BIGRAM_INT;
+			currentPrediction.confidence = interpolatedProbs;
 		}
 
 		Collections.sort(hashTagPredictions, Collections.reverseOrder());
