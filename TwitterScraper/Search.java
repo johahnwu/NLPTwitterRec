@@ -52,10 +52,14 @@ public class Search {
 			query.setLang("en");
 			QueryResult result;
 			int counter = 0;
+			String lastTweet = "placeholder";
 			do {
 				result = twitter.search(query);
 				List<Status> tweets = result.getTweets();
 				for (Status tweet : tweets) {
+					if (tweet.getText().equals(lastTweet))
+						continue;
+					lastTweet = tweet.getText();
 					Utils.sanitizeAndWriteTweet(tweet.getText(), pw);
 					counter++;
 					if (counter == k)
@@ -119,8 +123,8 @@ public class Search {
 				PrintWriter writer = new PrintWriter(new File(outputFile))) {
 			String word = "";
 			while ((word = reader.readLine()) != null) {
-				int timeLeft = search.SearchAndWriteKResults("#" + word+" -RT",
-						numTweetsPerHashTag, writer);
+				int timeLeft = search.SearchAndWriteKResults("#" + word
+						+ " -RT", numTweetsPerHashTag, writer);
 				if (timeLeft > 0) {
 					System.out.println("sleeping for " + timeLeft + " seconds");
 					Thread.sleep(timeLeft * 1000);
