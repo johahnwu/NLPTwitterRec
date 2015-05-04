@@ -1,0 +1,25 @@
+run
+
+.recommenders
+*/log
+*/condor_files
+*/trainingSet1
+*/bin
+*/data
+
+#Eclipse Projects
+.project
+.classpath
+.settings
+.metadata
+
+#Stuff I defined
+*.auth
+*.command
+*.class
+
+#vim
+*.swp
+
+#mac stuff
+*.DS_Store
