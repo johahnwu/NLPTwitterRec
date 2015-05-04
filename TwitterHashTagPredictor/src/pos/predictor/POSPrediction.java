@@ -65,23 +65,29 @@ public class POSPrediction {
 			}
 		}
 
-		double totalHashTags = 0.0;
-		// find the total number of hash tags
+		double maximumProb = 0.0;
+		// find the highest value in the value set
 		for (String partOfSpeech : unigramModel.keySet()) {
-			totalHashTags += unigramModel.get(partOfSpeech);
+			// totalHashTags += unigramModel.get(partOfSpeech);
+			maximumProb = Math.max(maximumProb, unigramModel.get(partOfSpeech));
 		}
-		// normalize each part of speech by the total number of hash tags
+		// normalize each part of speech probability
 		for (String partOfSpeech : unigramModel.keySet()) {
 			unigramModel.put(partOfSpeech, unigramModel.get(partOfSpeech)
-					/ totalHashTags);
+					/ maximumProb);
 		}
 
+		maximumProb = 0.0;
 		for (String bigramPOS : bigramModel.keySet()) {
-			bigramModel.put(bigramPOS, bigramModel.get(bigramPOS)
-					/ totalHashTags);
+			maximumProb = Math.max(maximumProb, bigramModel.get(bigramPOS));
+		}
+		for (String bigramPOS : bigramModel.keySet()) {
+			bigramModel
+					.put(bigramPOS, bigramModel.get(bigramPOS) / maximumProb);
 		}
 
 		// create map that contains both unigram and bigram
+		// we just throw it all into the same map
 		Map<String, Double> finalModel = new HashMap<String, Double>(
 				unigramModel);
 		finalModel.putAll(bigramModel);
