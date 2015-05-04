@@ -17,9 +17,10 @@ public class HashTagPrediction {
 	
 	String trainingTweetPath = "examples.txt"; 
 	String testingTweetPath = "examplesTest.txt"; 
-	String tweetHashDelim = "%"; 
+	String tweetHashDelim = "###"; 
 	int defaultTopK = 10; 
 	boolean useDefaultTopK = false; 
+	int numTweets; 
 	
 	HashMap<String, HashSet<String>> hfm = new HashMap<String, HashSet<String>>(); 
 	HashMap<String, HashMap<String, Integer>> thfm  = new HashMap<String, HashMap<String, Integer>>(); 
@@ -30,15 +31,28 @@ public class HashTagPrediction {
 	public HashTagPrediction(){
 		trainingTweets = null; 
 		testingTweets = null; 
+		numTweets = 0; 
+	}
+
+	public void setTrainingPath (String path){
+		trainingTweetPath = path; 
+	}
+
+	public void setTestingPath (String path){
+		testingTweetPath = path; 
 	}
 	
+	public void setDeliminator (String delim){
+		tweetHashDelim = delim; 
+	}
+
 	public void train(){
 		try {
 			trainingTweets = Files.readAllLines(Paths.get(trainingTweetPath), Charset.defaultCharset());
 		} catch (IOException e) {
 			System.out.println(e); 
 		} 
-		
+		numTweets = trainingTweets.size(); 
 		for (String line: trainingTweets){
 			String[] tweetAndHash = line.split(tweetHashDelim); 
 			System.out.println(tweetAndHash[1]); 
@@ -136,7 +150,7 @@ public class HashTagPrediction {
 		String[] wordsInSentence = tweet.split("\\s+");
 		HashMap<String, Double> recHashTags = new HashMap<String, Double>(); 
 		for (String word: wordsInSentence){
-			double idfVal = idf.get(word); 
+			double idfVal = Math.log(numTweets *1.0 / idf.get(word)); 
 			//loop through all hashtags co-occuring with word
 			HashMap<String, Integer> hashAssocWithWordAsMap = thfm.get(word); 
 			int totalHashTagFreq = 0; 
