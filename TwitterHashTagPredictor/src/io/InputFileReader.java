@@ -11,11 +11,11 @@ public class InputFileReader {
 	private List<File> filesToRead;
 	private BufferedReader currentReader;
 
-	public InputFileReader() {
+	public InputFileReader() throws IOException {
 		this(null);
 	}
 
-	public InputFileReader(File file) {
+	public InputFileReader(File file) throws IOException {
 		filesToRead = new LinkedList<File>();
 		currentReader = null;
 		if (file != null)

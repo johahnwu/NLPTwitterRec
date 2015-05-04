@@ -1,8 +1,9 @@
 package predictor;
 
-public class HashTagPrediction implements Comparable<HashTagPrediction>{
-	String hashtag;
-	double confidence;
+public class HashTagPrediction implements Comparable<HashTagPrediction> {
+	public String hashtag;
+	public double confidence;
+
 	@Override
 	public int compareTo(HashTagPrediction o) {
 		if (this.confidence > o.confidence)

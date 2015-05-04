@@ -21,12 +21,19 @@ public class TwitterHashTagPredictor {
 	private Map<String, Double> posProbabilities;
 
 	public TwitterHashTagPredictor() throws IOException {
-		this(TwitterPOSTagger.PENN_MODEL);
+		this(TwitterPOSTagger.PENN_MODEL, null);
 	}
 
-	public TwitterHashTagPredictor(String modelPOSFile) throws IOException {
-		posTagger = new TwitterPOSTagger(modelPOSFile);
-		predictionModel = new POSPredictionModel();
+	public TwitterHashTagPredictor(String modelPOSFile,
+			String predictionPOSModelFile) throws IOException {
+		if (modelPOSFile == null)
+			posTagger = new TwitterPOSTagger();
+		else
+			posTagger = new TwitterPOSTagger(modelPOSFile);
+		if (predictionPOSModelFile == null)
+			predictionModel = new POSPredictionModel();
+		else
+			predictionModel = new POSPredictionModel(predictionPOSModelFile);
 		posProbabilities = predictionModel.getModel();
 	}
 
@@ -62,12 +69,13 @@ public class TwitterHashTagPredictor {
 			double interpolatedProbs = unigramProb * UNIGRAM_INT + bigramProb
 					* BIGRAM_INT;
 			currentPrediction.confidence = interpolatedProbs;
+			hashTagPredictions.add(currentPrediction);
 		}
 
 		Collections.sort(hashTagPredictions, Collections.reverseOrder());
 		// truncate the list to the max size
 		int outputSize = Math.min(k, hashTagPredictions.size());
-		if (k >= 0)
+		if (k < 0)
 			outputSize = hashTagPredictions.size();
 
 		return hashTagPredictions.subList(0, outputSize);

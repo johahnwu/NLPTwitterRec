@@ -14,7 +14,7 @@ import pos.tagger.TaggedWord;
 public class POSPredictionModel {
 
 	private Map<String, Double> posTagMultipliers;
-	public static final String START_TAG = " <S>";
+	public static final String START_TAG = "<S>";
 	public static final String NO_MODEL_FILE = "models/pos_nomodel";
 
 	public POSPredictionModel() {
