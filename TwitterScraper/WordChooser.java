@@ -10,9 +10,9 @@ public class WordChooser {
 	public static final String dict12AnnotationsRegex = "[:&#<^=+]";
 
 	public static void main(String[] args) {
-		int numWords = 5000;
-		String outputFile = "dictionary/chosen_words";
-		String inputFile = "dictionary/common_words.txt";
+		int numWords = 10000;
+		String outputFile = "dictionary/six12chosen_words";
+		String inputFile = "dictionary/6of12.txt";
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(
 				inputFile));
