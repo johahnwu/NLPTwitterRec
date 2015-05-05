@@ -18,7 +18,7 @@ public class TestApproach2 {
 		String testTweet = "i hell cannot pee";
 		ArrayList<String> predicted = predictor.predictTweet(testTweet, 1);
 		// System.out.println(predicted);
-		predictor.test(1);
+		predictor.test(2);
 		// System.out.println(Utils.fixHashTags(testTweet)[2]);
 
 	}

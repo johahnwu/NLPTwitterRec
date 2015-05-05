@@ -54,6 +54,14 @@ public class Utils {
 		return wordsInSentence;
 	}
 
+	/**
+	 * Lowercases, removes non-alphanumerical characters and splits a string of
+	 * hashtags
+	 * 
+	 * @param hashtags
+	 *            String of hashtags
+	 * @return
+	 */
 	public static String[] fixHashTags(String hashtags) {
 		String[] hashtagArray = hashtags.split("\\s+");
 		for (int i = 0; i < hashtagArray.length; i++) {
@@ -66,5 +74,4 @@ public class Utils {
 		l.removeAll(Arrays.asList(null, ""));
 		return l;
 	}
-
 }
