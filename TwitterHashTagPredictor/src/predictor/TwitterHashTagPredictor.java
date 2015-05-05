@@ -37,6 +37,13 @@ public class TwitterHashTagPredictor {
 		posProbabilities = predictionModel.getModel();
 	}
 
+	public TwitterHashTagPredictor(TwitterPOSTagger tagger,
+			POSPredictionModel model) {
+		posTagger = tagger;
+		predictionModel = model;
+		posProbabilities = predictionModel.getModel();
+	}
+
 	/**
 	 * 
 	 * @param tweet
@@ -72,6 +79,7 @@ public class TwitterHashTagPredictor {
 			hashTagPredictions.add(currentPrediction);
 		}
 
+		// sort from highest prob to lowest prob
 		Collections.sort(hashTagPredictions, Collections.reverseOrder());
 		// truncate the list to the max size
 		int outputSize = Math.min(k, hashTagPredictions.size());

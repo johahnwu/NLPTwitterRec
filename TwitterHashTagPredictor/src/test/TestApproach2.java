@@ -1,12 +1,12 @@
 package test;
 
-import htfidh.HashTagPrediction;
+import htfidh.HTFIDHHashTagPredictor;
 import htfidh.ModelHelp;
 
 public class TestApproach2 {
 
 	public static void main(String[] args) {
-		HashTagPrediction predictor = new HashTagPrediction();
+		HTFIDHHashTagPredictor predictor = new HTFIDHHashTagPredictor();
 		// TODO set paths
 		predictor.setDeliminator("###");
 		predictor.train();
