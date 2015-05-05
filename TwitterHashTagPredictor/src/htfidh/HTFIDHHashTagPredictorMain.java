@@ -1,5 +1,7 @@
 package htfidh;
 
+import io.Utils;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -13,14 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class HTFIDHHashTagPredictor {
+public class HTFIDHHashTagPredictorMain {
 
-	String trainingTweetPath = "poemTags.txt";
-	String testingTweetPath = "examplesTest.txt";
-	String tweetHashDelim = "###";
-	int defaultTopK = 10;
-	boolean useDefaultTopK = false;
-	int numTweets;
+	private String trainingTweetPath = "poemTags.txt";
+	private String testingTweetPath = "poemTest.txt";
+	private String tweetHashDelim = "###";
+	private int defaultTopK = 10;
+	private boolean useDefaultTopK = false;
+	private int numTweets;
 
 	public HashMap<String, HashSet<String>> hfm = new HashMap<String, HashSet<String>>();
 	public HashMap<String, HashMap<String, Integer>> thfm = new HashMap<String, HashMap<String, Integer>>();
@@ -28,7 +30,7 @@ public class HTFIDHHashTagPredictor {
 	public List<String> trainingTweets;
 	public List<String> testingTweets;
 
-	public HTFIDHHashTagPredictor() {
+	public HTFIDHHashTagPredictorMain() {
 		trainingTweets = null;
 		testingTweets = null;
 		numTweets = 0;
@@ -56,21 +58,18 @@ public class HTFIDHHashTagPredictor {
 		numTweets = trainingTweets.size();
 		for (String line : trainingTweets) {
 			String[] tweetAndHash = line.split(tweetHashDelim);
-			// System.out.println(tweetAndHash[1]);
 			if (tweetAndHash.length == 2) {
 				// Create the three datastructures.
-				// TODO Porter Stemming
-				// TODO All lowercase(?)
-				// TODO remove punctuation(?)
 
-				String[] wordsInSentence = tweetAndHash[0].split("\\s+");
-				String[] hashtags = tweetAndHash[1].split("\\s+");
+				// String[] wordsInSentence = tweetAndHash[0].split("\\s+");
+				String[] wordsInSentence = Utils.fixSentence(tweetAndHash[0]);
+				String[] hashtags = Utils.fixHashTags(tweetAndHash[1]);
 				// add hashtags to some data structure.
 
 				// for thfm
 				HashSet<String> wordsAddedToIdf = new HashSet<String>();
 				for (String word : wordsInSentence) {
-					System.out.println(thfm.size());
+					// System.out.println(thfm.size());
 					HashMap<String, Integer> wordHashTagFreq;
 					if (thfm.containsKey(word)) {
 						wordHashTagFreq = thfm.get(word);
@@ -120,7 +119,7 @@ public class HTFIDHHashTagPredictor {
 		}
 	}
 
-	public void test() {
+	public void test(int topK) {
 		// Predicting
 		try {
 			testingTweets = Files.readAllLines(Paths.get(testingTweetPath),
@@ -131,14 +130,14 @@ public class HTFIDHHashTagPredictor {
 		}
 		int correct = 0;
 		int incorrect = 0;
-		int topK = 10;
 		for (String line : testingTweets) {
 			String[] tweetAndHash = line.split(tweetHashDelim);
 			if (tweetAndHash.length == 2) {
 				String tweet = tweetAndHash[0];
 				ArrayList<String> hashtags = new ArrayList<String>(
-						Arrays.asList(tweetAndHash[1].split("\\s+")));
+						Arrays.asList(Utils.fixHashTags(tweetAndHash[1])));
 				ArrayList<String> predictedHashTags = predictTweet(tweet, topK);
+				hashtags = Utils.removeEmpty(hashtags);
 				if (EvaluateHelp.getSinglePrecisionApproach2(predictedHashTags,
 						hashtags)) {
 					correct++;
@@ -153,13 +152,18 @@ public class HTFIDHHashTagPredictor {
 	}
 
 	public ArrayList<String> predictTweet(String tweet, int topK) {
-		String[] wordsInSentence = tweet.split("\\s+");
+		String[] wordsInSentence = Utils.fixSentence(tweet); // tweet.split("\\s+");
 		HashMap<String, Double> recHashTags = new HashMap<String, Double>();
 		for (String word : wordsInSentence) {
 			// what if word doesn't exist in idf?
-			double idfVal = Math.log(numTweets * 1.0 / idf.get(word));
+			double idfVal = 0;
+			if (idf.containsKey(word)) {
+				idfVal = Math.log(numTweets * 1.0 / idf.get(word));
+			} else {
+				continue;
+			}
 			// loop through all hashtags co-occuring with word
-			// what if word doens't exist in thfm?
+			// what if word doesn't exist in thfm?
 			HashMap<String, Integer> hashAssocWithWordAsMap = thfm.get(word);
 			int totalHashTagFreq = 0;
 			for (Integer freq : hashAssocWithWordAsMap.values()) {
@@ -212,14 +216,12 @@ public class HTFIDHHashTagPredictor {
 			this.base = base;
 		}
 
-		// Note: this comparator imposes orderings that are inconsistent with
-		// equals.
 		public int compare(String a, String b) {
 			if (base.get(a) >= base.get(b)) {
 				return -1;
 			} else {
 				return 1;
-			} // returning 0 would merge keys
+			}
 		}
 	}
 
