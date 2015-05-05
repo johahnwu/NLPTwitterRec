@@ -7,6 +7,8 @@ public class EvaluateHelp {
 	public static boolean getSinglePrecisionApproach2(
 			ArrayList<String> predictedHashTags,
 			ArrayList<String> actualHashTags) {
+		System.out.println(predictedHashTags);
+		System.out.println(actualHashTags);
 		for (String predicted : predictedHashTags) {
 			if (actualHashTags.contains(predicted)) {
 				return true;
