@@ -15,16 +15,28 @@ public class POSPredictionModel {
 
 	private Map<String, Double> posTagMultipliers;
 	public static final String START_TAG = "<S>";
-	public static final String NO_MODEL_FILE = "models/pos_nomodel";
+	public static final String NO_MODEL_FILE = "models/normal_posmodel";
 
 	public POSPredictionModel() {
-		this(null);
+		posTagMultipliers = new HashMap<String, Double>();
+		loadModel(NO_MODEL_FILE);
 	}
 
 	public POSPredictionModel(String modelFileName) {
 		posTagMultipliers = new HashMap<String, Double>();
 		if (modelFileName != null)
 			loadModel(modelFileName);
+		else
+			loadModel(NO_MODEL_FILE);
+	}
+
+	public POSPredictionModel(Map<String, Double> multipliers) {
+		if (multipliers != null)
+			posTagMultipliers = multipliers;
+		else {
+			posTagMultipliers = new HashMap<String, Double>();
+			loadModel(NO_MODEL_FILE);
+		}
 	}
 
 	public Map<String, Double> getModel() {

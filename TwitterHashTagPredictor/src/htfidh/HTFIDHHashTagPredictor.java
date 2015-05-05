@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class HashTagPrediction {
+public class HTFIDHHashTagPredictor {
 
 	String trainingTweetPath = "poemTags.txt";
 	String testingTweetPath = "examplesTest.txt";
@@ -28,7 +28,7 @@ public class HashTagPrediction {
 	public List<String> trainingTweets;
 	public List<String> testingTweets;
 
-	public HashTagPrediction() {
+	public HTFIDHHashTagPredictor() {
 		trainingTweets = null;
 		testingTweets = null;
 		numTweets = 0;

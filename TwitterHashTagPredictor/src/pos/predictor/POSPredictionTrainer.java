@@ -13,58 +13,78 @@ import java.util.Map;
 import pos.tagger.TaggedWord;
 import pos.tagger.TwitterPOSTagger;
 
-public class POSPrediction {
+public class POSPredictionTrainer {
 	private TwitterPOSTagger posTagger;
+	private Map<String, Double> unigramModel;
+	private Map<String, Double> bigramModel;
 
-	public POSPrediction() throws IOException {
+	public POSPredictionTrainer() throws IOException {
 		posTagger = new TwitterPOSTagger();
 	}
 
-	public POSPrediction(TwitterPOSTagger tagger) {
+	public POSPredictionTrainer(TwitterPOSTagger tagger) {
 		posTagger = tagger;
+	}
+
+	public POSPredictionModel trainModel(List<TweetHashTagTuple> trainingSet) {
+		initializeModels();
+		for (TweetHashTagTuple tuple : trainingSet) {
+			addTupleToModels(tuple);
+		}
+		return new POSPredictionModel(normalizeAndCombineModels());
 	}
 
 	public POSPredictionModel trainModel(InputFileReader reader)
 			throws IOException {
-		POSPredictionModel predictionModel = new POSPredictionModel();
-		Map<String, Double> unigramModel = predictionModel.getModel();
-		Map<String, Double> bigramModel = new HashMap<String, Double>();
+		initializeModels();
 		String tweet;
 		while ((tweet = reader.getNextLine()) != null) {
 			TweetHashTagTuple tuple = Utils.convertInputToHashTagTuple(tweet);
 			// some of the input is bad
 			if (tuple == null)
 				continue;
-
-			// get the tagged words/pos
-			List<TaggedWord> taggedWords = posTagger.tagSentence(tuple.text);
-
-			// previous POS for bigram model
-			String previousPOS = POSPredictionModel.START_TAG;
-			for (TaggedWord tw : taggedWords) {
-				String partOfSpeech = tw.pos;
-				String sanitizedWord = Utils.sanitizeWordToHashTag(tw.word);
-
-				if (!unigramModel.containsKey(partOfSpeech)) {
-					unigramModel.put(partOfSpeech, 0.0);
-				}
-
-				String bigramPOS = POSPredictionModel.concatWordsWithDelimiter(
-						previousPOS, partOfSpeech);
-
-				if (!bigramModel.containsKey(bigramPOS)) {
-					bigramModel.put(bigramPOS, 0.0);
-				}
-				if (tuple.hashTags.contains(sanitizedWord)) {
-					unigramModel.put(partOfSpeech,
-							unigramModel.get(partOfSpeech) + 1);
-					bigramModel.put(bigramPOS, bigramModel.get(bigramPOS) + 1);
-				}
-
-				previousPOS = partOfSpeech;
-			}
+			addTupleToModels(tuple);
 		}
 
+		return new POSPredictionModel(normalizeAndCombineModels());
+	}
+
+	private void initializeModels() {
+		unigramModel = new HashMap<String, Double>();
+		bigramModel = new HashMap<String, Double>();
+	}
+
+	private void addTupleToModels(TweetHashTagTuple tuple) {
+		// get the tagged words/pos
+		List<TaggedWord> taggedWords = posTagger.tagSentence(tuple.text);
+
+		// previous POS for bigram model
+		String previousPOS = POSPredictionModel.START_TAG;
+		for (TaggedWord tw : taggedWords) {
+			String partOfSpeech = tw.pos;
+			String sanitizedWord = Utils.sanitizeWordToHashTag(tw.word);
+
+			if (!unigramModel.containsKey(partOfSpeech)) {
+				unigramModel.put(partOfSpeech, 0.0);
+			}
+
+			String bigramPOS = POSPredictionModel.concatWordsWithDelimiter(
+					previousPOS, partOfSpeech);
+
+			if (!bigramModel.containsKey(bigramPOS)) {
+				bigramModel.put(bigramPOS, 0.0);
+			}
+			if (tuple.hashTags.contains(sanitizedWord)) {
+				unigramModel.put(partOfSpeech,
+						unigramModel.get(partOfSpeech) + 1);
+				bigramModel.put(bigramPOS, bigramModel.get(bigramPOS) + 1);
+			}
+
+			previousPOS = partOfSpeech;
+		}
+	}
+
+	private Map<String, Double> normalizeAndCombineModels() {
 		double maximumProb = 0.0;
 		// find the highest value in the value set
 		for (String partOfSpeech : unigramModel.keySet()) {
@@ -91,9 +111,7 @@ public class POSPrediction {
 		Map<String, Double> finalModel = new HashMap<String, Double>(
 				unigramModel);
 		finalModel.putAll(bigramModel);
-
-		predictionModel.setModel(finalModel);
-		return predictionModel;
+		return finalModel;
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -114,11 +132,12 @@ public class POSPrediction {
 		}
 
 		System.out.println("Initiating prediction model.");
-		POSPrediction prediction = new POSPrediction();
+		POSPredictionTrainer predictionTrainer = new POSPredictionTrainer();
 		System.out.println("Loading input files");
 		InputFileReader fileReader = new InputFileReader(new File(inputFile));
 		System.out.println("Training pos model...");
-		POSPredictionModel trainedModel = prediction.trainModel(fileReader);
+		POSPredictionModel trainedModel = predictionTrainer
+				.trainModel(fileReader);
 		System.out.println("Writing model to file");
 		trainedModel.writeModelToFile(new File(outputFile));
 		System.out.println("Done!");

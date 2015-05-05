@@ -14,7 +14,7 @@ import predictor.TwitterHashTagPredictor;
 
 public class HashTagCorrectnessTestHarness {
 	public static void main(String[] args) throws IOException {
-		String inputFile = "data/searchedHashTags";
+		String inputFile = "data/randomized_tweets";
 		String outputFile = "output";
 		String posPredictionModelFile = "models/normal_posmodel";
 		int numPredictions = 3;

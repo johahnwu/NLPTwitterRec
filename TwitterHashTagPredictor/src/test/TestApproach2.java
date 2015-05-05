@@ -1,6 +1,6 @@
 package test;
 
-import htfidh.HTFIDHHashTagPredicto;
+import htfidh.HTFIDHHashTagPredictorMain;
 import htfidh.ModelHelp;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class TestApproach2 {
 
 	public static void main(String[] args) {
-		HTFIDHHashTagPredicto predictor = new HTFIDHHashTagPredicto();
+		HTFIDHHashTagPredictorMain predictor = new HTFIDHHashTagPredictorMain();
 		// TODO set paths
 		predictor.setDeliminator("###");
 		predictor.train();
