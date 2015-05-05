@@ -231,7 +231,7 @@ public class POSTenFoldEvaluation {
 				inputFile = args[index + 1];
 				index += 2;
 			} else if (args[index].equalsIgnoreCase("--outputFile")) {
-				outputFile += args[index + 1];
+				outputFile = args[index + 1];
 				index += 2;
 			} else {
 				index += 1;
