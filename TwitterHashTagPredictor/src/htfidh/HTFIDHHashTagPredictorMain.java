@@ -156,7 +156,12 @@ public class HTFIDHHashTagPredictorMain {
 		HashMap<String, Double> recHashTags = new HashMap<String, Double>();
 		for (String word : wordsInSentence) {
 			// what if word doesn't exist in idf?
-			double idfVal = Math.log(numTweets * 1.0 / idf.get(word));
+			double idfVal = 0;
+			if (idf.containsKey(word)) {
+				idfVal = Math.log(numTweets * 1.0 / idf.get(word));
+			} else {
+				continue;
+			}
 			// loop through all hashtags co-occuring with word
 			// what if word doesn't exist in thfm?
 			HashMap<String, Integer> hashAssocWithWordAsMap = thfm.get(word);

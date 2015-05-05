@@ -15,9 +15,9 @@ public class TestApproach2 {
 		// ModelHelp.printTHFM(predictor.thfm);
 		ModelHelp.printHFM(predictor.hfm);
 		// ModelHelp.printIDF(predictor.idf);
-		String testTweet = "i hell cannot pee";
+		String testTweet = "i hell burnt pee";
 		ArrayList<String> predicted = predictor.predictTweet(testTweet, 1);
-		// System.out.println(predicted);
+		System.out.println(predicted);
 		predictor.test(2);
 		// System.out.println(Utils.fixHashTags(testTweet)[2]);
 
