@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import predictor.POSHashTagPredictor;
+import test.Evaluator.EvaluatorOptions;
 
 public class POSTenFoldEvaluation {
 
 	public static void main(String[] args) throws IOException {
 		String inputFile = "data/randomized_tweets";
-		String outputFile = "output/normal_output";
+		String outputFile = "output/naive_output";
 
 		int index = 0;
 		while (index < args.length) {
@@ -42,7 +43,7 @@ public class POSTenFoldEvaluation {
 			for (int i = 0; i < 20; i++)
 				numPredictions.add(i);
 			evaluator.tenFoldEvaluateAndWrite(predictor, totalList,
-					numPredictions, pw);
+					numPredictions, pw, EvaluatorOptions.NAIVE);
 		}
 
 	}

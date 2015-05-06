@@ -6,8 +6,10 @@ import io.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pos.predictor.POSPredictionModel;
 import pos.predictor.POSPredictionTrainer;
@@ -95,6 +97,19 @@ public class POSHashTagPredictor implements HashTagPredictor {
 		if (k < 0)
 			outputSize = hashTagPredictions.size();
 
-		return hashTagPredictions.subList(0, outputSize);
+		// get rid of duplicate hash tags
+		Set<String> seenHashTags = new HashSet<String>();
+		List<HashTagPrediction> finalPredictions = new ArrayList<HashTagPrediction>();
+		int counter = 0;
+		for (HashTagPrediction prediction : hashTagPredictions) {
+			if (seenHashTags.contains(prediction.hashtag))
+				continue;
+			seenHashTags.add(prediction.hashtag);
+			finalPredictions.add(prediction);
+			counter += 1;
+			if (counter == outputSize)
+				break;
+		}
+		return finalPredictions;
 	}
 }

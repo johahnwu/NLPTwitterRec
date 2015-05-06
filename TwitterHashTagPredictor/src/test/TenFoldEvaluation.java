@@ -10,6 +10,7 @@ import java.util.List;
 
 import predictor.HashTagPrediction;
 import predictor.HashTagPredictor;
+import test.Evaluator.EvaluatorOptions;
 
 public class TenFoldEvaluation {
 	/**
@@ -18,12 +19,14 @@ public class TenFoldEvaluation {
 	 * @param numPredictionsList
 	 * @param pw
 	 *            PrintWrtier to write out to
+	 * @param option
+	 *            Evaluator Option [NAIVE, etc]. @see test.Evaluator
 	 * @throws IOException
 	 */
 	public void tenFoldEvaluateAndWrite(HashTagPredictor predictor,
 			List<TweetHashTagTuple> totalList,
-			List<Integer> numPredictionsList, PrintWriter pw)
-			throws IOException {
+			List<Integer> numPredictionsList, PrintWriter pw,
+			EvaluatorOptions option) throws IOException {
 		int TEN = 10;
 
 		System.out.println("tenFoldEvaluation with set of " + totalList.size()
@@ -56,7 +59,7 @@ public class TenFoldEvaluation {
 
 			// test the the model
 			List<Double> accuracyEvaluations = testPredictor(testingList,
-					predictor, numPredictionsList);
+					predictor, numPredictionsList, option);
 
 			assert (accuracyEvaluations.size() == accuracyTotals.size());
 			for (int j = 0; j < accuracyEvaluations.size(); j++) {
@@ -107,7 +110,8 @@ public class TenFoldEvaluation {
 	}
 
 	public List<Double> testPredictor(List<TweetHashTagTuple> testingList,
-			HashTagPredictor predictor, List<Integer> numPredictionsList) {
+			HashTagPredictor predictor, List<Integer> numPredictionsList,
+			EvaluatorOptions option) {
 		List<Double> numberCorrectList = new ArrayList<Double>(
 				numPredictionsList.size());
 		// initialize the list with all 0.0
@@ -127,8 +131,9 @@ public class TenFoldEvaluation {
 			}
 
 			// tuple.hashTags is the actual hash tag set
-			List<Double> evaluations = evaluateCorrectnessWithKPredictions(
-					predictions, tuple.hashTags, numPredictionsList);
+			List<Double> evaluations = Evaluator
+					.evaluateCorrectnessWithKPredictions(predictions,
+							tuple.hashTags, numPredictionsList, option);
 
 			assert (evaluations.size() == numPredictionsList.size());
 			// if correct, add it to the count
@@ -151,47 +156,4 @@ public class TenFoldEvaluation {
 		return accuracyList;
 	}
 
-	/**
-	 * This evaluates for each k in numPredictionsList, if any of the top k hash
-	 * tags are contained in the actual hash tag set. The returned list
-	 * corresponds to the numPredictionsList. For example, [1, 2, 3] might
-	 * return with [0.0, 0.0, 1.0], where it means that the third predicted hash
-	 * tag is in the actual set but the first two are not. 1.0 means contained,
-	 * 0.0 means the top k are not contained in the actual set.
-	 * 
-	 * @param predictions
-	 *            List of all predicted hash tags, sorted by highest confidence
-	 *            first
-	 * @param actual
-	 *            List of actual hash tags corresponding to Tweet text
-	 * @param numPredictionsList
-	 *            List of "k" predictions
-	 * @return List where 1.0 means correctly tagged, 0.0 otherwise
-	 */
-	private List<Double> evaluateCorrectnessWithKPredictions(
-			List<String> predictions, List<String> actual,
-			List<Integer> numPredictionsList) {
-		List<Double> evaluationList = new ArrayList<Double>(
-				numPredictionsList.size());
-		// k corresponds to the top K predictions
-		for (int k : numPredictionsList) {
-			// Sometimes the number of predictions is less than the wanted
-			// number
-			int stopIndex = Math.min(k, predictions.size());
-			boolean correctlyTagged = false;
-			// iterate through the prediction list and see if it's in the actual
-			// set
-			for (int i = 0; i < stopIndex; i++) {
-				if (actual.contains(predictions.get(i))) {
-					correctlyTagged = true;
-					break;
-				}
-			}
-			if (correctlyTagged)
-				evaluationList.add(1.0);
-			else
-				evaluationList.add(0.0);
-		}
-		return evaluationList;
-	}
 }
