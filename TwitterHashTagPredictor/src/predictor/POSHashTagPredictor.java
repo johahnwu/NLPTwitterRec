@@ -50,9 +50,9 @@ public class POSHashTagPredictor implements HashTagPredictor {
 	@Override
 	public boolean trainModel(List<TweetHashTagTuple> trainingList) {
 		predictionModel = modelTrainer.trainModel(trainingList);
-		for (String s : predictionModel.getModel().keySet()) {
-			System.out.println(s + ":" + predictionModel.getModel().get(s));
-		}
+		// for (String s : predictionModel.getModel().keySet()) {
+		// System.out.println(s + ":" + predictionModel.getModel().get(s));
+		// }
 		return true;
 	}
 
