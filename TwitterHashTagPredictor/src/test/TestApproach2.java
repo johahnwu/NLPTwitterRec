@@ -36,7 +36,7 @@ public class TestApproach2 {
 		List<HashTagPrediction> predicted = predictor
 				.predictTopKHashTagsForTweet(testTweet, 2);
 		System.out.println(predicted);
-		// predictor.test(2);
+		predictor.test(1);
 		// System.out.println(Utils.fixHashTags(testTweet)[2]);
 
 	}

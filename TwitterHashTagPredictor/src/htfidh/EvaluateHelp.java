@@ -1,16 +1,19 @@
 package htfidh;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import predictor.HashTagPrediction;
 
 public class EvaluateHelp {
 
 	public static boolean getSinglePrecisionApproach2(
-			ArrayList<String> predictedHashTags,
+			List<HashTagPrediction> predictedHashTags,
 			ArrayList<String> actualHashTags) {
 		System.out.println(predictedHashTags);
 		System.out.println(actualHashTags);
-		for (String predicted : predictedHashTags) {
-			if (actualHashTags.contains(predicted)) {
+		for (HashTagPrediction predicted : predictedHashTags) {
+			if (actualHashTags.contains(predicted.hashtag)) {
 				return true;
 			}
 		}

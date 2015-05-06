@@ -164,7 +164,8 @@ public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 				String tweet = tweetAndHash[0];
 				ArrayList<String> hashtags = new ArrayList<String>(
 						Arrays.asList(Utils.fixHashTags(tweetAndHash[1])));
-				ArrayList<String> predictedHashTags = predictTweet(tweet, topK);
+				List<HashTagPrediction> predictedHashTags = predictTopKHashTagsForTweet(
+						tweet, topK);
 				hashtags = Utils.removeEmpty(hashtags);
 				if (EvaluateHelp.getSinglePrecisionApproach2(predictedHashTags,
 						hashtags)) {
