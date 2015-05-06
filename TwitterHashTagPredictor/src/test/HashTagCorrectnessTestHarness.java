@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import predictor.HashTagPrediction;
-import predictor.TwitterHashTagPredictor;
+import predictor.POSHashTagPredictor;
 
 public class HashTagCorrectnessTestHarness {
 	public static void main(String[] args) throws IOException {
@@ -38,7 +38,7 @@ public class HashTagCorrectnessTestHarness {
 			}
 		}
 
-		TwitterHashTagPredictor predictor = new TwitterHashTagPredictor(null,
+		POSHashTagPredictor predictor = new POSHashTagPredictor(null,
 				posPredictionModelFile);
 
 		InputFileReader fileReader = new InputFileReader(new File(inputFile));

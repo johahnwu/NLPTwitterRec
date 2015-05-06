@@ -1,5 +1,6 @@
 package predictor;
 
+import io.TweetHashTagTuple;
 import io.Utils;
 
 import java.io.IOException;
@@ -9,22 +10,23 @@ import java.util.List;
 import java.util.Map;
 
 import pos.predictor.POSPredictionModel;
+import pos.predictor.POSPredictionTrainer;
 import pos.tagger.TaggedWord;
 import pos.tagger.TwitterPOSTagger;
 
-public class TwitterHashTagPredictor {
+public class POSHashTagPredictor implements HashTagPredictor {
 	public static final double UNIGRAM_INT = 0.5;
 	public static final double BIGRAM_INT = 0.5;
 
 	private TwitterPOSTagger posTagger;
 	private POSPredictionModel predictionModel;
-	private Map<String, Double> posProbabilities;
+	private POSPredictionTrainer modelTrainer;
 
-	public TwitterHashTagPredictor() throws IOException {
+	public POSHashTagPredictor() throws IOException {
 		this(TwitterPOSTagger.PENN_MODEL, null);
 	}
 
-	public TwitterHashTagPredictor(String modelPOSFile,
+	public POSHashTagPredictor(String modelPOSFile,
 			String predictionPOSModelFile) throws IOException {
 		if (modelPOSFile == null)
 			posTagger = new TwitterPOSTagger();
@@ -34,14 +36,19 @@ public class TwitterHashTagPredictor {
 			predictionModel = new POSPredictionModel();
 		else
 			predictionModel = new POSPredictionModel(predictionPOSModelFile);
-		posProbabilities = predictionModel.getModel();
+		modelTrainer = new POSPredictionTrainer(posTagger);
 	}
 
-	public TwitterHashTagPredictor(TwitterPOSTagger tagger,
-			POSPredictionModel model) {
+	public POSHashTagPredictor(TwitterPOSTagger tagger, POSPredictionModel model) {
 		posTagger = tagger;
 		predictionModel = model;
-		posProbabilities = predictionModel.getModel();
+		modelTrainer = new POSPredictionTrainer(tagger);
+	}
+
+	@Override
+	public boolean trainModel(List<TweetHashTagTuple> trainingList) {
+		predictionModel = modelTrainer.trainModel(trainingList);
+		return true;
 	}
 
 	/**
@@ -53,9 +60,11 @@ public class TwitterHashTagPredictor {
 	 *            all
 	 * @return the k best predicted HashTags
 	 */
+	@Override
 	public List<HashTagPrediction> predictTopKHashTagsForTweet(String tweet,
 			int k) {
 		List<HashTagPrediction> hashTagPredictions = new ArrayList<HashTagPrediction>();
+		Map<String, Double> posProbabilities = predictionModel.getModel();
 
 		List<TaggedWord> taggedWords = posTagger.tagSentence(tweet);
 		String previousPOS = POSPredictionModel.START_TAG;

@@ -15,7 +15,7 @@ import pos.predictor.POSPredictionModel;
 import pos.predictor.POSPredictionTrainer;
 import pos.tagger.TwitterPOSTagger;
 import predictor.HashTagPrediction;
-import predictor.TwitterHashTagPredictor;
+import predictor.POSHashTagPredictor;
 
 public class POSTenFoldEvaluation {
 	private TwitterPOSTagger posTagger;
@@ -66,7 +66,7 @@ public class POSTenFoldEvaluation {
 			POSPredictionModel predictionModel = trainModel(trainingList);
 
 			// create a predictor with said model
-			TwitterHashTagPredictor hashTagPredictor = new TwitterHashTagPredictor(
+			POSHashTagPredictor hashTagPredictor = new POSHashTagPredictor(
 					posTagger, predictionModel);
 
 			// test the the model
@@ -133,7 +133,7 @@ public class POSTenFoldEvaluation {
 	}
 
 	public List<Double> testPredictor(List<TweetHashTagTuple> testingList,
-			TwitterHashTagPredictor predictor, List<Integer> numPredictionsList) {
+			POSHashTagPredictor predictor, List<Integer> numPredictionsList) {
 		List<Double> numberCorrectList = new ArrayList<Double>(
 				numPredictionsList.size());
 		// initialize the list with all 0.0
