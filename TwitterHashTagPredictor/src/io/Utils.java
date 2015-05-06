@@ -1,11 +1,28 @@
 package io;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Utils {
+
 	public static String HASHTAG_DELIMITER = " ### ";
+
+	public static List<TweetHashTagTuple> loadFilesIntoHashTagTupleList(
+			File file) throws IOException {
+		InputFileReader reader = new InputFileReader(file);
+		List<TweetHashTagTuple> totalList = new ArrayList<TweetHashTagTuple>();
+		String tweet;
+		while ((tweet = reader.getNextLine()) != null) {
+			TweetHashTagTuple tuple = Utils.convertInputToHashTagTuple(tweet);
+			if (tuple == null)
+				continue;
+			totalList.add(tuple);
+		}
+		return totalList;
+	}
 
 	/**
 	 * converts a line of text from the format [message text] ### [hashtag]* to
