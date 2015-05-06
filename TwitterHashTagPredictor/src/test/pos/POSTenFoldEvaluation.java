@@ -1,4 +1,4 @@
-package test;
+package test.pos;
 
 import io.TweetHashTagTuple;
 import io.Utils;
@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import predictor.POSHashTagPredictor;
-import test.Evaluator.EvaluatorOptions;
+import test.TenFoldEvaluation;
+import test.EvaluationMethods.EvaluatorOptions;
 
 public class POSTenFoldEvaluation {
 

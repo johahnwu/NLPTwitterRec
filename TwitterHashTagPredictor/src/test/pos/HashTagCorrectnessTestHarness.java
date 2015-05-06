@@ -1,4 +1,4 @@
-package test;
+package test.pos;
 
 import io.InputFileReader;
 import io.TweetHashTagTuple;
