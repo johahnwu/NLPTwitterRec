@@ -13,4 +13,9 @@ public class HashTagPrediction implements Comparable<HashTagPrediction> {
 		else
 			return 0;
 	}
+
+	@Override
+	public String toString() {
+		return "[" + hashtag + ", " + confidence + "]";
+	}
 }
