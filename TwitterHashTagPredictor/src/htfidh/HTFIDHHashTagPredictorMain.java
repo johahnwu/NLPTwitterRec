@@ -21,18 +21,22 @@ import predictor.HashTagPredictor;
 
 public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 
-	private String trainingTweetPath = "poemTags.txt";
-	private String testingTweetPath = "poemTest.txt";
-	private String tweetHashDelim = "###";
-	private int defaultTopK = 10;
-	private boolean useDefaultTopK = false;
+	private String trainingTweetPath = "poemTags.txt"; // not needed anymore for
+														// overall project
+	private String testingTweetPath = "poemTest.txt"; // not needed anymore for
+														// overall project
+	private String tweetHashDelim = "###"; // not needed anymore for overall
+											// project
+	private int defaultTopK = 10; // not needed anymore for overall project
+	private boolean useDefaultTopK = false; // not needed anymore for overall
+											// project
 	private int numTweets;
 
 	public HashMap<String, HashSet<String>> hfm = new HashMap<String, HashSet<String>>();
 	public HashMap<String, HashMap<String, Integer>> thfm = new HashMap<String, HashMap<String, Integer>>();
 	public HashMap<String, Integer> idf = new HashMap<String, Integer>();
 	// public List<String> trainingTweets;
-	public List<String> testingTweets;
+	public List<String> testingTweets; // not needed anymore for overall project
 
 	public HTFIDHHashTagPredictorMain() {
 		// trainingTweets = null;
@@ -40,14 +44,29 @@ public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 		numTweets = 0;
 	}
 
+	/**
+	 * legacy
+	 * 
+	 * @param path
+	 */
 	public void setTrainingPath(String path) {
 		trainingTweetPath = path;
 	}
 
+	/**
+	 * legacy
+	 * 
+	 * @param path
+	 */
 	public void setTestingPath(String path) {
 		testingTweetPath = path;
 	}
 
+	/**
+	 * legacy
+	 * 
+	 * @param delim
+	 */
 	public void setDeliminator(String delim) {
 		tweetHashDelim = delim;
 	}
