@@ -253,10 +253,14 @@ public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 			int k) {
 		ArrayList<String> result = this.predictTweet(tweet, k);
 		ArrayList<HashTagPrediction> ret = new ArrayList<HashTagPrediction>();
+		Double confidence = 1.0;
+		Double increment = 0.8 / result.size(); // magic numbers, don't worry
+												// about it.
 		for (String hashtag : result) {
 			HashTagPrediction temp = new HashTagPrediction();
 			temp.hashtag = hashtag;
-			temp.confidence = 1;
+			temp.confidence = confidence;
+			confidence = confidence - increment;
 			ret.add(temp);
 		}
 		return ret;
