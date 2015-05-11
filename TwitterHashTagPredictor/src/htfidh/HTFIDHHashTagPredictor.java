@@ -3,181 +3,38 @@ package htfidh;
 import io.TweetHashTagTuple;
 import io.Utils;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import predictor.HashTagPrediction;
 import predictor.HashTagPredictor;
 
-public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
+public class HTFIDHHashTagPredictor implements HashTagPredictor {
 
-	private String trainingTweetPath = "poemTags.txt"; // not needed anymore for
-														// overall project
-	private String testingTweetPath = "poemTest.txt"; // not needed anymore for
-														// overall project
-	private String tweetHashDelim = "###"; // not needed anymore for overall
-											// project
 	private int defaultTopK = 10; // not needed anymore for overall project
 	private boolean useDefaultTopK = false; // not needed anymore for overall
 											// project
 	private int numTweets;
 
-	public HashMap<String, HashSet<String>> hfm = new HashMap<String, HashSet<String>>();
-	public HashMap<String, HashMap<String, Integer>> thfm = new HashMap<String, HashMap<String, Integer>>();
-	public HashMap<String, Integer> idf = new HashMap<String, Integer>();
+	public Map<String, Set<String>> hfm;
+	public Map<String, Map<String, Integer>> thfm;
+	public Map<String, Integer> idf;
 	// public List<String> trainingTweets;
 	public List<String> testingTweets; // not needed anymore for overall project
 
-	public HTFIDHHashTagPredictorMain() {
+	public HTFIDHHashTagPredictor() {
 		// trainingTweets = null;
 		testingTweets = null;
 		numTweets = 0;
-	}
-
-	/**
-	 * legacy
-	 * 
-	 * @param path
-	 */
-	public void setTrainingPath(String path) {
-		trainingTweetPath = path;
-	}
-
-	/**
-	 * legacy
-	 * 
-	 * @param path
-	 */
-	public void setTestingPath(String path) {
-		testingTweetPath = path;
-	}
-
-	/**
-	 * legacy
-	 * 
-	 * @param delim
-	 */
-	public void setDeliminator(String delim) {
-		tweetHashDelim = delim;
-	}
-
-	// public void train() {
-	// try {
-	// trainingTweets = Files.readAllLines(Paths.get(trainingTweetPath),
-	// Charset.defaultCharset());
-	// } catch (IOException e) {
-	// System.out.println(e);
-	// }
-	// numTweets = trainingTweets.size();
-	// for (String line : trainingTweets) {
-	// String[] tweetAndHash = line.split(tweetHashDelim);
-	// if (tweetAndHash.length == 2) {
-	// // Create the three datastructures.
-	// // TODO OOV?
-	// // String[] wordsInSentence = tweetAndHash[0].split("\\s+");
-	// String[] wordsInSentence = Utils.fixSentence(tweetAndHash[0]);
-	// String[] hashtags = Utils.fixHashTags(tweetAndHash[1]);
-	// // add hashtags to some data structure.
-	//
-	// // for thfm
-	// HashSet<String> wordsAddedToIdf = new HashSet<String>();
-	// for (String word : wordsInSentence) {
-	// // System.out.println(thfm.size());
-	// HashMap<String, Integer> wordHashTagFreq;
-	// if (thfm.containsKey(word)) {
-	// wordHashTagFreq = thfm.get(word);
-	// } else {
-	// wordHashTagFreq = new HashMap<String, Integer>();
-	// }
-	// for (String ht : hashtags) {
-	// if (ht.trim().length() <= 0) {
-	// continue;
-	// }
-	// if (wordHashTagFreq.containsKey(ht)) {
-	// wordHashTagFreq
-	// .put(ht, wordHashTagFreq.get(ht) + 1);
-	// } else {
-	// wordHashTagFreq.put(ht, 1);
-	// }
-	// }
-	// thfm.put(word, wordHashTagFreq);
-	// // for idf
-	// if (!wordsAddedToIdf.contains(word)) {
-	// wordsAddedToIdf.add(word);
-	// if (idf.containsKey(word)) {
-	// idf.put(word, idf.get(word) + 1);
-	// } else {
-	// idf.put(word, 1);
-	// }
-	// }
-	// }
-	//
-	// // for hfm
-	// for (String ht : hashtags) {
-	// if (ht.trim().length() <= 0) {
-	// continue;
-	// }
-	// HashSet<String> wordsAssociatedWithHash;
-	// if (hfm.containsKey(ht)) {
-	// wordsAssociatedWithHash = hfm.get(ht);
-	// } else {
-	// wordsAssociatedWithHash = new HashSet<String>();
-	// }
-	// for (String word : wordsInSentence) {
-	// wordsAssociatedWithHash.add(word);
-	// }
-	// hfm.put(ht, wordsAssociatedWithHash);
-	// }
-	// }
-	// }
-	// }
-
-	/**
-	 * old code, not needed for overall project
-	 * 
-	 * @param topK
-	 */
-	public void test(int topK) {
-		// Predicting
-		try {
-			testingTweets = Files.readAllLines(Paths.get(testingTweetPath),
-					Charset.defaultCharset());
-
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-		int correct = 0;
-		int incorrect = 0;
-		for (String line : testingTweets) {
-			String[] tweetAndHash = line.split(tweetHashDelim);
-			if (tweetAndHash.length == 2) {
-				String tweet = tweetAndHash[0];
-				ArrayList<String> hashtags = new ArrayList<String>(
-						Arrays.asList(Utils.fixHashTags(tweetAndHash[1])));
-				List<HashTagPrediction> predictedHashTags = predictTopKHashTagsForTweet(
-						tweet, topK);
-				hashtags = Utils.removeEmpty(hashtags);
-				if (EvaluateHelp.getSinglePrecisionApproach2(predictedHashTags,
-						hashtags)) {
-					correct++;
-				} else {
-					incorrect++;
-				}
-
-			}
-		}
-		System.out.println(EvaluateHelp.precision(correct, incorrect));
-
+		hfm = new HashMap<String, Set<String>>();
+		thfm = new HashMap<String, Map<String, Integer>>();
+		idf = new HashMap<String, Integer>();
 	}
 
 	/**
@@ -200,7 +57,7 @@ public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 			}
 			// loop through all hashtags co-occuring with word
 			// what if word doesn't exist in thfm?
-			HashMap<String, Integer> hashAssocWithWordAsMap = thfm.get(word);
+			Map<String, Integer> hashAssocWithWordAsMap = thfm.get(word);
 			int totalHashTagFreq = 0;
 			for (Integer freq : hashAssocWithWordAsMap.values()) {
 				totalHashTagFreq = totalHashTagFreq + freq;
@@ -289,6 +146,9 @@ public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 	@Override
 	public boolean trainModel(List<TweetHashTagTuple> trainingList) {
 		numTweets = trainingList.size();
+		hfm.clear();
+		thfm.clear();
+		idf.clear();
 
 		for (TweetHashTagTuple tup : trainingList) {
 			// String[] tweetAndHash = tup.text.split(tweetHashDelim);
@@ -301,10 +161,10 @@ public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 			// add hashtags to some data structure.
 
 			// for thfm
-			HashSet<String> wordsAddedToIdf = new HashSet<String>();
+			Set<String> wordsAddedToIdf = new HashSet<String>();
 			for (String word : wordsInSentence) {
 				// System.out.println(thfm.size());
-				HashMap<String, Integer> wordHashTagFreq;
+				Map<String, Integer> wordHashTagFreq;
 				if (thfm.containsKey(word)) {
 					wordHashTagFreq = thfm.get(word);
 				} else {
@@ -337,7 +197,7 @@ public class HTFIDHHashTagPredictorMain implements HashTagPredictor {
 				if (ht.trim().length() <= 0) {
 					continue;
 				}
-				HashSet<String> wordsAssociatedWithHash;
+				Set<String> wordsAssociatedWithHash;
 				if (hfm.containsKey(ht)) {
 					wordsAssociatedWithHash = hfm.get(ht);
 				} else {

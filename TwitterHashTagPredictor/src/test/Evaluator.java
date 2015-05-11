@@ -21,9 +21,14 @@ public class Evaluator {
 
 		double totalNumTweets = 0.0;
 
+		// find the largest number of predictions
+		int maxPredictions = 1;
+		for (int num : numPredictionsList)
+			maxPredictions = Math.max(num, maxPredictions);
+
 		for (TweetHashTagTuple tuple : testingList) {
 			List<HashTagPrediction> predictedHashTags = predictor
-					.predictTopKHashTagsForTweet(tuple.text, -1);
+					.predictTopKHashTagsForTweet(tuple.text, maxPredictions);
 
 			// extract the predictions
 			List<String> predictions = new ArrayList<String>();
