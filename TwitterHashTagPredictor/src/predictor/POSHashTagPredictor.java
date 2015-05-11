@@ -17,8 +17,8 @@ import pos.tagger.TaggedWord;
 import pos.tagger.TwitterPOSTagger;
 
 public class POSHashTagPredictor implements HashTagPredictor {
-	public static final double UNIGRAM_INT = 0.5;
-	public static final double BIGRAM_INT = 0.5;
+	public static final double UNIGRAM_INT = 0.2;
+	public static final double BIGRAM_INT = 0.8;
 
 	private TwitterPOSTagger posTagger;
 	private POSPredictionModel predictionModel;
@@ -82,11 +82,14 @@ public class POSHashTagPredictor implements HashTagPredictor {
 			double unigramProb = 0.0;
 			if (posProbabilities.containsKey(unigramPOS)) {
 				unigramProb = posProbabilities.get(unigramPOS);
+
 			}
 			double bigramProb = 0.0;
 			if (posProbabilities.containsKey(bigramPOS)) {
 				bigramProb = posProbabilities.get(bigramPOS);
+
 			}
+			previousPOS = unigramPOS;
 			double interpolatedProbs = unigramProb * UNIGRAM_INT + bigramProb
 					* BIGRAM_INT;
 			currentPrediction.confidence = interpolatedProbs;

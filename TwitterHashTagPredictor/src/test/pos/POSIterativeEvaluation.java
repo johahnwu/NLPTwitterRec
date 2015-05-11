@@ -18,6 +18,7 @@ public class POSIterativeEvaluation {
 		String inputFile = "data/randomized_tweets";
 		String outputFile = "output/iterative_recall_output.csv";
 		String testingFile = "data/testing_set";
+		EvaluatorOptions options = EvaluatorOptions.RECALL;
 
 		int index = 0;
 		while (index < args.length) {
@@ -29,6 +30,17 @@ public class POSIterativeEvaluation {
 				index += 2;
 			} else if (args[index].equalsIgnoreCase("--testingFile")) {
 				testingFile = args[index + 1];
+				index += 2;
+			} else if (args[index].equalsIgnoreCase("--evalType")) {
+				String evalType = args[index + 1];
+				if (evalType.equalsIgnoreCase("NAIVE"))
+					options = EvaluatorOptions.NAIVE;
+				else if (evalType.equalsIgnoreCase("RECALL"))
+					options = EvaluatorOptions.RECALL;
+				else {
+					System.err
+							.println("Invalid evalType, requires [NAIVE, RECALL]");
+				}
 				index += 2;
 			} else {
 				index += 1;
@@ -60,7 +72,7 @@ public class POSIterativeEvaluation {
 			for (int i = 0; i < 20; i++)
 				numPredictions.add(i);
 			evaluator.iterativelyEvaluate(predictor, trainingCandidates,
-					testingList, numPredictions, pw, EvaluatorOptions.RECALL);
+					testingList, numPredictions, pw, options);
 
 			System.out.println("DONE!");
 		}
