@@ -17,7 +17,8 @@ import predictor.HashTagPredictor;
 
 public class HTFIDHHashTagPredictor implements HashTagPredictor {
 
-	private int defaultTopK = 10; // not needed anymore for overall project
+	private static final int defaultTopK = 30; // not needed anymore for overall
+												// project
 	private boolean useDefaultTopK = false; // not needed anymore for overall
 											// project
 	private int numTweets;
@@ -95,7 +96,10 @@ public class HTFIDHHashTagPredictor implements HashTagPredictor {
 				comp);
 		resultTreeMap.putAll(result);
 		ArrayList<String> returnTopK = new ArrayList<String>();
-		int useThisTopK = useDefaultTopK ? defaultTopK : topK;
+		int useThisTopK = topK;
+		if (topK < 0) {
+			useThisTopK = defaultTopK;
+		}
 		int count = 0;
 		for (Map.Entry<String, Double> entry : resultTreeMap.entrySet()) {
 

@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface HashTagPredictor {
 	/**
-	 * Get the top k predicted hash tags for the given tweet
+	 * Get the top k predicted hash tags for the given tweet. If k == -1, give a
+	 * "default" of hash tags, i.e. all possibilities
 	 * 
 	 * @param tweet
 	 *            Tweet to predict for

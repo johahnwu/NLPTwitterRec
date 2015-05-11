@@ -16,9 +16,11 @@ import test.IterativeEvaluation;
 public class POSIterativeEvaluation {
 	public static void main(String[] args) throws IOException {
 		String inputFile = "data/randomized_tweets";
-		String outputFile = "output/iterative_recall_output.csv";
+		String outputFile = "output/iterative_naive_output.csv";
 		String testingFile = "data/testing_set";
-		EvaluatorOptions options = EvaluatorOptions.RECALL;
+		EvaluatorOptions options = EvaluatorOptions.NAIVE;
+		int numIterations = 10;
+		int incrementSize = -1;
 
 		int index = 0;
 		while (index < args.length) {
@@ -42,7 +44,14 @@ public class POSIterativeEvaluation {
 							.println("Invalid evalType, requires [NAIVE, RECALL]");
 				}
 				index += 2;
+			} else if (args[index].equalsIgnoreCase("--iterations")) {
+				numIterations = Integer.valueOf(args[index + 1]);
+				index += 2;
+			} else if (args[index].equalsIgnoreCase("--incrementSize")) {
+				incrementSize = Integer.valueOf(args[index + 1]);
+				index += 2;
 			} else {
+
 				index += 1;
 			}
 		}
@@ -61,12 +70,12 @@ public class POSIterativeEvaluation {
 
 		System.out.println("File to write to " + outputFile);
 		try (PrintWriter pw = new PrintWriter(new File(outputFile))) {
-			int numIterations = 10;
-			int increment = (int) Math
-					.ceil(((double) trainingCandidates.size() / numIterations));
-			System.out.println("incrementSize " + increment);
+			if (incrementSize == -1)
+				incrementSize = (int) Math.ceil(((double) trainingCandidates
+						.size() / numIterations));
+			System.out.println("incrementSize " + incrementSize);
 			IterativeEvaluation evaluator = new IterativeEvaluation(
-					numIterations, increment);
+					numIterations, incrementSize);
 			POSHashTagPredictor predictor = new POSHashTagPredictor();
 			List<Integer> numPredictions = new ArrayList<Integer>();
 			for (int i = 0; i < 20; i++)
