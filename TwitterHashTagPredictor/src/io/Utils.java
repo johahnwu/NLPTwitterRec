@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Utils {
@@ -90,5 +91,16 @@ public class Utils {
 	public static ArrayList<String> removeEmpty(ArrayList<String> l) {
 		l.removeAll(Arrays.asList(null, ""));
 		return l;
+	}
+
+	public static List<TweetHashTagTuple> chooseAndRemoveTenPercent(
+			List<TweetHashTagTuple> list) {
+		List<TweetHashTagTuple> clone = new ArrayList<>(list);
+		Collections.shuffle(clone);
+		int size = list.size() / 10;
+		clone = clone.subList(0, size);
+		list.removeAll(clone);
+		return clone;
+
 	}
 }

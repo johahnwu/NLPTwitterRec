@@ -32,7 +32,11 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 	@Override
 	public List<HashTagPrediction> predictTopKHashTagsForTweet(String tweet,
 			int k) {
-		// TODO Auto-generated method stub
+		List<HashTagPrediction> posHTPredictions = posHTPredictor
+				.predictTopKHashTagsForTweet(tweet, -1);
+		List<HashTagPrediction> htfidhHTPredictions = htfidhHTPredictor
+				.predictTopKHashTagsForTweet(tweet, -1);
+
 		return null;
 	}
 }

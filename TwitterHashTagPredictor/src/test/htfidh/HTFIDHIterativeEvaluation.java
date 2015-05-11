@@ -63,11 +63,17 @@ public class HTFIDHIterativeEvaluation {
 		System.out.println(String.format("Loaded %d tweets.",
 				trainingCandidates.size()));
 
-		System.out.println("Loading testing file " + testingFile);
+		// System.out.println("Loading testing file " + testingFile);
+		// List<TweetHashTagTuple> testingList = Utils
+		// .loadFilesIntoHashTagTupleList(new File(testingFile));
+		// System.out.println(String.format("Loaded %d tweets.",
+		// testingList.size()));
+		System.out.println("Choosing test candidates from training candidates");
 		List<TweetHashTagTuple> testingList = Utils
-				.loadFilesIntoHashTagTupleList(new File(testingFile));
-		System.out.println(String.format("Loaded %d tweets.",
-				testingList.size()));
+				.chooseAndRemoveTenPercent(trainingCandidates);
+		System.out.println(String.format(
+				"Training Candidates %d, \t Testing %d",
+				trainingCandidates.size(), testingList.size()));
 
 		System.out.println("File to write to " + outputFile);
 		try (PrintWriter pw = new PrintWriter(new File(outputFile))) {
