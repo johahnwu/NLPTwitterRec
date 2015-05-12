@@ -25,6 +25,11 @@ public class HFIHUOtsuka extends HTFIDHHashTagPredictor {
 	public HashMap<String, Integer> hfm = new HashMap<String, Integer>();
 	public int sizeOfCorpus = 0;
 
+	public HFIHUOtsuka() {
+		super();
+	}
+
+	@Override
 	public ArrayList<String> predictTweet(String tweet, int topK) {
 		String[] wordsInSentence = Utils.fixSentence(tweet); // tweet.split("\\s+");
 		HashMap<String, Double> recHashTags = new HashMap<String, Double>();
@@ -34,6 +39,8 @@ public class HFIHUOtsuka extends HTFIDHHashTagPredictor {
 			// loop through all hashtags co-occuring with word
 			// what if word doesn't exist in thfm?
 			Map<String, Integer> hashAssocWithWordAsMap = thfm.get(word);
+			if (hashAssocWithWordAsMap == null)
+				continue;
 			int totalHashTagFreq = 0;
 			for (Integer freq : hashAssocWithWordAsMap.values()) {
 				totalHashTagFreq = totalHashTagFreq + freq;

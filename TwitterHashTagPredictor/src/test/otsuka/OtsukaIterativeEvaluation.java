@@ -1,6 +1,6 @@
-package test.htfidh;
+package test.otsuka;
 
-import htfidh.HTFIDHHashTagPredictor;
+import htfidh.HFIHUOtsuka;
 import io.TweetHashTagTuple;
 import io.Utils;
 
@@ -14,7 +14,7 @@ import predictor.HashTagPredictor;
 import test.IterativeEvaluation;
 import test.Options;
 
-public class HTFIDHIterativeEvaluation {
+public class OtsukaIterativeEvaluation {
 	public static void main(String[] args) throws IOException {
 		Options options = new Options(args);
 
@@ -45,7 +45,7 @@ public class HTFIDHIterativeEvaluation {
 			System.out.println("incrementSize " + options.incrementSize);
 			IterativeEvaluation evaluator = new IterativeEvaluation(
 					options.numIterations, options.incrementSize);
-			HashTagPredictor predictor = new HTFIDHHashTagPredictor();
+			HashTagPredictor predictor = new HFIHUOtsuka();
 			List<Integer> numPredictions = new ArrayList<Integer>();
 			for (int i = 0; i < 20; i++)
 				numPredictions.add(i);
