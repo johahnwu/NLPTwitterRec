@@ -10,41 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import predictor.POSHashTagPredictor;
+import test.Options;
 import test.TenFoldEvaluation;
-import test.EvaluationMethods.EvaluatorOptions;
 
 public class POSTenFoldEvaluation {
 
 	public static void main(String[] args) throws IOException {
-		String inputFile = "data/randomized_tweets";
-		String outputFile = "output/naive_output";
+		Options options = new Options(args);
 
-		int index = 0;
-		while (index < args.length) {
-			if (args[index].equalsIgnoreCase("--inputFile")) {
-				inputFile = args[index + 1];
-				index += 2;
-			} else if (args[index].equalsIgnoreCase("--outputFile")) {
-				outputFile = args[index + 1];
-				index += 2;
-			} else {
-				index += 1;
-			}
-		}
-
-		System.out.println("Loading file " + inputFile);
+		System.out.println("Loading file " + options.inputFile);
 		List<TweetHashTagTuple> totalList = Utils
-				.loadFilesIntoHashTagTupleList(new File(inputFile));
+				.loadFilesIntoHashTagTupleList(new File(options.inputFile));
 
-		System.out.println("File to write to " + outputFile);
-		try (PrintWriter pw = new PrintWriter(new File(outputFile))) {
+		System.out.println("File to write to " + options.outputFile);
+		try (PrintWriter pw = new PrintWriter(new File(options.outputFile))) {
 			TenFoldEvaluation evaluator = new TenFoldEvaluation();
 			POSHashTagPredictor predictor = new POSHashTagPredictor();
 			List<Integer> numPredictions = new ArrayList<Integer>();
 			for (int i = 0; i < 20; i++)
 				numPredictions.add(i);
 			evaluator.tenFoldEvaluateAndWrite(predictor, totalList,
-					numPredictions, pw, EvaluatorOptions.NAIVE);
+					numPredictions, pw, options.evalOptions);
 		}
 
 	}
