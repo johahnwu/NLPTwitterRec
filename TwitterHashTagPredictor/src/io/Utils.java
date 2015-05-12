@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import predictor.HashTagPrediction;
+
 public class Utils {
 
 	public static String HASHTAG_DELIMITER = " ### ";
@@ -102,5 +104,28 @@ public class Utils {
 		list.removeAll(clone);
 		return clone;
 
+	}
+
+	/**
+	 * Normalizes the confidence values of a list of HashtagPrediction objects
+	 * 
+	 * @param l
+	 *            The list of hashtagPrediction objects
+	 * @return List of hashtagPrediction objects that have their confidence
+	 *         values normalized
+	 */
+	public static List<HashTagPrediction> Normalize(List<HashTagPrediction> l) {
+		double sum = 0;
+		for (HashTagPrediction temp : l) {
+			sum = temp.confidence;
+		}
+
+		ArrayList<HashTagPrediction> ret = new ArrayList<HashTagPrediction>();
+		for (HashTagPrediction temp : l) {
+			temp.confidence = temp.confidence / sum;
+			ret.add(temp);
+		}
+
+		return ret;
 	}
 }

@@ -144,7 +144,7 @@ public class HTFIDHHashTagPredictor implements HashTagPredictor {
 			confidence = confidence - increment;
 			ret.add(temp);
 		}
-		return ret;
+		return Utils.Normalize(ret);
 	}
 
 	@Override

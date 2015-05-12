@@ -70,8 +70,8 @@ public class HFIHUOtsuka extends HTFIDHHashTagPredictor {
 		ArrayList<String> result = this.predictTweet(tweet, k);
 		ArrayList<HashTagPrediction> ret = new ArrayList<HashTagPrediction>();
 		Double confidence = 1.0;
-		Double increment = 0.8 / result.size(); // magic numbers, don't worry
-												// about it.
+		Double increment = 0.8 / result.size();
+
 		for (String hashtag : result) {
 			HashTagPrediction temp = new HashTagPrediction();
 			temp.hashtag = hashtag;
