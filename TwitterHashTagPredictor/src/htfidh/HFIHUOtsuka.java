@@ -13,7 +13,9 @@ import java.util.Set;
 import predictor.HashTagPrediction;
 
 /**
- * Our implementation of HFIHU
+ * Our implementation of HFIHU Probably should have been implemented before
+ * HTFIDHashTagPredictor Changed so that the data structure calculations reflect
+ * how they are described in the paper
  * 
  * @author Johahn
  *
