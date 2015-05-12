@@ -5,9 +5,12 @@ import io.TweetHashTagTuple;
 import io.Utils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public class ComboHashTagPredictor implements HashTagPredictor {
+
+	private static int DEFAULT_K = 30;
 
 	private POSHashTagPredictor posHTPredictor;
 	private HTFIDHHashTagPredictor htfidhHTPredictor;
@@ -58,6 +61,14 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 			}
 		}
 
-		return htfWeightedList;
+		// sort by highest confidence first
+		Collections.sort(htfWeightedList, Collections.reverseOrder());
+		// get the top k results
+		int maxIndex = DEFAULT_K;
+		if (k >= 0) {
+			maxIndex = Math.min(htfWeightedList.size(), k);
+		}
+
+		return htfWeightedList.subList(0, maxIndex);
 	}
 }
