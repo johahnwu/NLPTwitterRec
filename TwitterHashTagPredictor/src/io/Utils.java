@@ -128,4 +128,14 @@ public class Utils {
 
 		return ret;
 	}
+
+	public static List<HashTagPrediction> Weight(List<HashTagPrediction> l,
+			double weight) {
+		ArrayList<HashTagPrediction> ret = new ArrayList<HashTagPrediction>();
+		for (HashTagPrediction temp : l) {
+			temp.confidence = temp.confidence * weight;
+			ret.add(temp);
+		}
+		return ret;
+	}
 }
