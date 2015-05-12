@@ -32,9 +32,9 @@ public class Options {
 				String evalType = args[index + 1];
 				if (evalType.equalsIgnoreCase("NAIVE"))
 					evalOptions = EvaluatorOptions.NAIVE;
-				else if (evalType.equalsIgnoreCase("RECALL"))
+				else if (evalType.equalsIgnoreCase("RECALL")) {
 					evalOptions = EvaluatorOptions.RECALL;
-				else {
+				} else {
 					System.err
 							.println("Invalid evalType, requires [NAIVE, RECALL]");
 				}

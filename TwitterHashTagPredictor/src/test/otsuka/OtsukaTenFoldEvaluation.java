@@ -1,6 +1,6 @@
 package test.otsuka;
 
-import htfidh.HTFIDHHashTagPredictor;
+import htfidh.HFIHUOtsuka;
 import io.TweetHashTagTuple;
 import io.Utils;
 
@@ -24,7 +24,7 @@ public class OtsukaTenFoldEvaluation {
 		System.out.println("File to write to " + options.outputFile);
 		try (PrintWriter pw = new PrintWriter(new File(options.outputFile))) {
 			TenFoldEvaluation evaluator = new TenFoldEvaluation();
-			HashTagPredictor predictor = new HTFIDHHashTagPredictor();
+			HashTagPredictor predictor = new HFIHUOtsuka();
 			List<Integer> numPredictions = new ArrayList<Integer>();
 			for (int i = 0; i < 20; i++)
 				numPredictions.add(i);

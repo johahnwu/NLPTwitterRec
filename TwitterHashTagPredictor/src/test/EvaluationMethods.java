@@ -81,7 +81,7 @@ public class EvaluationMethods {
 			int stopIndex = Math.min(k, predictions.size());
 			// iterate through the prediction list and see if it's in the actual
 			// set
-			int numCorrect = 0;
+			double numCorrect = 0;
 			for (int i = 0; i < stopIndex; i++) {
 				if (actual.contains(predictions.get(i))) {
 					numCorrect += 1;
@@ -89,7 +89,7 @@ public class EvaluationMethods {
 			}
 			// we use the min as the divisor because it'll be impossible to get
 			// a full score if k is less than the actual hash tags set
-			int divisor = Math.min(k, actual.size());
+			double divisor = Math.min(k, actual.size());
 			// dividing by 0 is no good
 			if (divisor <= 0)
 				divisor = 1;
