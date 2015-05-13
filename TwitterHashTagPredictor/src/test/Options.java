@@ -1,5 +1,13 @@
 package test;
 
+import htfidh.HFIHUOtsuka;
+import htfidh.HTFIDHHashTagPredictor;
+
+import java.io.IOException;
+
+import predictor.ComboHashTagPredictor;
+import predictor.HashTagPredictor;
+import predictor.POSHashTagPredictor;
 import test.EvaluationMethods.EvaluatorOptions;
 
 /**
@@ -15,8 +23,9 @@ public class Options {
 	public EvaluatorOptions evalOptions = EvaluatorOptions.NAIVE;
 	public int numIterations = 10;
 	public int incrementSize = -1;
+	public HashTagPredictor predictor = null;
 
-	public Options(String[] args) {
+	public Options(String[] args) throws IOException {
 		int index = 0;
 		while (index < args.length) {
 			if (args[index].equalsIgnoreCase("--inputFile")) {
@@ -45,10 +54,27 @@ public class Options {
 			} else if (args[index].equalsIgnoreCase("--incrementSize")) {
 				incrementSize = Integer.valueOf(args[index + 1]);
 				index += 2;
+			} else if (args[index].equalsIgnoreCase("--predictor")) {
+				predictor = getPredictor(args[index + 1]);
+				index += 2;
 			} else {
-
 				index += 1;
 			}
+		}
+	}
+
+	private HashTagPredictor getPredictor(String predictorString)
+			throws IOException {
+		if (predictorString.equalsIgnoreCase("htfidh")) {
+			return new HTFIDHHashTagPredictor();
+		} else if (predictorString.equalsIgnoreCase("pos")) {
+			return new POSHashTagPredictor();
+		} else if (predictorString.equalsIgnoreCase("otsuka")) {
+			return new HFIHUOtsuka();
+		} else if (predictorString.equalsIgnoreCase("combo")) {
+			return new ComboHashTagPredictor();
+		} else {
+			return null;
 		}
 	}
 }
