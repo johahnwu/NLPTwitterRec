@@ -115,9 +115,9 @@ public class Utils {
 	 *         values normalized
 	 */
 	public static List<HashTagPrediction> Normalize(List<HashTagPrediction> l) {
-		double sum = 0;
+		double sum = 0.0;
 		for (HashTagPrediction temp : l) {
-			sum = temp.confidence;
+			sum += temp.confidence;
 		}
 
 		ArrayList<HashTagPrediction> ret = new ArrayList<HashTagPrediction>();

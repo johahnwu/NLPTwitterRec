@@ -43,20 +43,18 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 		List<HashTagPrediction> htfidhHTPredictions = htfidhHTPredictor
 				.predictTopKHashTagsForTweet(tweet, -1);
 
-		posHTPredictions = Utils.Normalize(posHTPredictions);
-		// htf is already normalized
-
 		// add them up
 		List<HashTagPrediction> htfWeightedList = Utils.Weight(
 				htfidhHTPredictions, htfWeight);
-		for (HashTagPrediction posObject : posHTPredictions) {
+		List<HashTagPrediction> posWeightedList = Utils.Weight(
+				posHTPredictions, posWeight);
+		for (HashTagPrediction posObject : posWeightedList) {
 			int indx = htfWeightedList.indexOf(posObject.hashtag);
 			if (indx >= 0) {
 				HashTagPrediction htfObject = htfWeightedList.get(indx);
 				htfObject.confidence = htfObject.confidence
-						+ posObject.confidence * posWeight;
+						+ posObject.confidence;
 			} else {
-				posObject.confidence = posObject.confidence * posWeight;
 				htfWeightedList.add(posObject);
 			}
 		}

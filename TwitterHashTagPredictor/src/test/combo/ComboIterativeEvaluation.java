@@ -30,6 +30,7 @@ public class ComboIterativeEvaluation {
 		// .loadFilesIntoHashTagTupleList(new File(testingFile));
 		// System.out.println(String.format("Loaded %d tweets.",
 		// testingList.size()));
+
 		System.out.println("Choosing test candidates from training candidates");
 		List<TweetHashTagTuple> testingList = Utils
 				.chooseAndRemoveTenPercent(trainingCandidates);
