@@ -51,7 +51,7 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 				htfidhHTPredictions, htfWeight);
 		for (HashTagPrediction posObject : posHTPredictions) {
 			int indx = htfWeightedList.indexOf(posObject.hashtag);
-			if (indx > 0) {
+			if (indx >= 0) {
 				HashTagPrediction htfObject = htfWeightedList.get(indx);
 				htfObject.confidence = htfObject.confidence
 						+ posObject.confidence * posWeight;
@@ -64,7 +64,7 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 		// sort by highest confidence first
 		Collections.sort(htfWeightedList, Collections.reverseOrder());
 		// get the top k results
-		int maxIndex = DEFAULT_K;
+		int maxIndex = Math.min(htfWeightedList.size(), DEFAULT_K);
 		if (k >= 0) {
 			maxIndex = Math.min(htfWeightedList.size(), k);
 		}
