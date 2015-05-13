@@ -45,7 +45,7 @@ public class HTFIDHHashTagPredictor implements HashTagPredictor {
 	 * @param topK
 	 * @return
 	 */
-	public ArrayList<String> predictTweet(String tweet, int topK) {
+	public ArrayList<HashTagPrediction> predictTweet(String tweet, int topK) {
 		String[] wordsInSentence = Utils.fixSentence(tweet); // tweet.split("\\s+");
 		HashMap<String, Double> recHashTags = new HashMap<String, Double>();
 		for (String word : wordsInSentence) {
@@ -90,20 +90,23 @@ public class HTFIDHHashTagPredictor implements HashTagPredictor {
 	 * @param topK
 	 * @return
 	 */
-	public ArrayList<String> findTopK(HashMap<String, Double> result, int topK) {
+	public ArrayList<HashTagPrediction> findTopK(
+			HashMap<String, Double> result, int topK) {
 		ValueComparator comp = new ValueComparator(result);
 		TreeMap<String, Double> resultTreeMap = new TreeMap<String, Double>(
 				comp);
 		resultTreeMap.putAll(result);
-		ArrayList<String> returnTopK = new ArrayList<String>();
+		ArrayList<HashTagPrediction> returnTopK = new ArrayList<>();
 		int useThisTopK = topK;
 		if (topK < 0) {
 			useThisTopK = defaultTopK;
 		}
 		int count = 0;
 		for (Map.Entry<String, Double> entry : resultTreeMap.entrySet()) {
-
-			returnTopK.add(entry.getKey());
+			HashTagPrediction prediction = new HashTagPrediction();
+			prediction.hashtag = entry.getKey();
+			prediction.confidence = entry.getValue();
+			returnTopK.add(prediction);
 			count++;
 			if (count >= useThisTopK) {
 				break;
@@ -132,20 +135,26 @@ public class HTFIDHHashTagPredictor implements HashTagPredictor {
 	@Override
 	public List<HashTagPrediction> predictTopKHashTagsForTweet(String tweet,
 			int k) {
-		ArrayList<String> result = this.predictTweet(tweet, k);
-		ArrayList<HashTagPrediction> ret = new ArrayList<HashTagPrediction>();
-		Double confidence = 1.0;
-		Double increment = 0.8 / result.size(); // magic numbers, don't worry
-												// about it.
-		for (String hashtag : result) {
-			HashTagPrediction temp = new HashTagPrediction();
-			temp.hashtag = hashtag;
-			temp.confidence = confidence;
-			confidence = confidence - increment;
-			ret.add(temp);
-		}
+		ArrayList<HashTagPrediction> result = this.predictTweet(tweet, k);
+		// ArrayList<HashTagPrediction> ret = new
+		// ArrayList<HashTagPrediction>();
+		// Double confidence = 1.0;
+		// Double increment = 0.8 / result.size(); // magic numbers, don't worry
+		// // about it.
+		// for (String hashtag : result) {
+		// HashTagPrediction temp = new HashTagPrediction();
+		// temp.hashtag = hashtag;
+		// temp.confidence = confidence;
+		// confidence = confidence - increment;
+		// ret.add(temp);
+		// }
 		// return Utils.Normalize(ret);
-		return ret;
+		double maxConfidence = 0.0;
+		for (HashTagPrediction prediction : result)
+			maxConfidence = Math.max(prediction.confidence, maxConfidence);
+		for (HashTagPrediction prediction : result)
+			prediction.confidence = prediction.confidence / maxConfidence;
+		return result;
 	}
 
 	@Override

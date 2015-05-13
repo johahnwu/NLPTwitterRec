@@ -6,10 +6,9 @@ import io.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import pos.predictor.POSPredictionModel;
 import pos.predictor.POSPredictionTrainer;
@@ -17,8 +16,8 @@ import pos.tagger.TaggedWord;
 import pos.tagger.TwitterPOSTagger;
 
 public class POSHashTagPredictor implements HashTagPredictor {
-	public static final double UNIGRAM_INT = 0.2;
-	public static final double BIGRAM_INT = 0.8;
+	public static final double UNIGRAM_INT = 0.3;
+	public static final double BIGRAM_INT = 0.7;
 
 	private TwitterPOSTagger posTagger;
 	private POSPredictionModel predictionModel;
@@ -96,26 +95,46 @@ public class POSHashTagPredictor implements HashTagPredictor {
 			hashTagPredictions.add(currentPrediction);
 		}
 
-		// sort from highest prob to lowest prob
-		Collections.sort(hashTagPredictions, Collections.reverseOrder());
-		// truncate the list to the max size
-		int outputSize = Math.min(k, hashTagPredictions.size());
-		if (k < 0)
-			outputSize = hashTagPredictions.size();
-
-		// get rid of duplicate hash tags
-		Set<String> seenHashTags = new HashSet<String>();
+		// account for duplicate hash tags
+		Map<String, Integer> seenHashTags = new HashMap<String, Integer>();
+		Map<String, Integer> counts = new HashMap<String, Integer>();
 		List<HashTagPrediction> finalPredictions = new ArrayList<HashTagPrediction>();
-		int counter = 0;
 		for (HashTagPrediction prediction : hashTagPredictions) {
-			if (seenHashTags.contains(prediction.hashtag))
-				continue;
-			seenHashTags.add(prediction.hashtag);
-			finalPredictions.add(prediction);
-			counter += 1;
-			if (counter == outputSize)
-				break;
+			String ht = prediction.hashtag;
+			if (seenHashTags.keySet().contains(ht)) {
+				counts.put(ht, counts.get(ht) + 1);
+				int index = seenHashTags.get(ht);
+				finalPredictions.get(index).confidence += prediction.confidence;
+			} else {
+				seenHashTags.put(ht, finalPredictions.size());
+				counts.put(ht, 1);
+				finalPredictions.add(prediction);
+			}
 		}
-		return finalPredictions;
+
+		// take the (1+.5 (n-1)count)th root
+		for (HashTagPrediction prediction : hashTagPredictions) {
+			int count = counts.get(prediction.hashtag);
+			double exponent = 1.0 / (count);
+			prediction.confidence = Math.pow(prediction.confidence, exponent);
+		}
+
+		// make the max value 1
+		double maxConfidence = 0.0;
+		for (HashTagPrediction prediction : finalPredictions) {
+			maxConfidence = Math.max(maxConfidence, prediction.confidence);
+		}
+		for (HashTagPrediction prediction : finalPredictions) {
+			prediction.confidence = prediction.confidence / maxConfidence;
+		}
+
+		// sort from highest prob to lowest prob
+		Collections.sort(finalPredictions, Collections.reverseOrder());
+		// truncate the list to the max size
+		int outputSize = Math.min(k, finalPredictions.size());
+		if (k < 0)
+			outputSize = finalPredictions.size();
+
+		return finalPredictions.subList(0, outputSize);
 	}
 }

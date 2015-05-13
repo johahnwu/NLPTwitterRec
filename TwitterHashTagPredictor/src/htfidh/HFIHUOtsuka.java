@@ -30,7 +30,7 @@ public class HFIHUOtsuka extends HTFIDHHashTagPredictor {
 	}
 
 	@Override
-	public ArrayList<String> predictTweet(String tweet, int topK) {
+	public ArrayList<HashTagPrediction> predictTweet(String tweet, int topK) {
 		String[] wordsInSentence = Utils.fixSentence(tweet); // tweet.split("\\s+");
 		HashMap<String, Double> recHashTags = new HashMap<String, Double>();
 		for (String word : wordsInSentence) {
@@ -62,24 +62,6 @@ public class HFIHUOtsuka extends HTFIDHHashTagPredictor {
 		}
 
 		return this.findTopK(recHashTags, topK);
-	}
-
-	@Override
-	public List<HashTagPrediction> predictTopKHashTagsForTweet(String tweet,
-			int k) {
-		ArrayList<String> result = this.predictTweet(tweet, k);
-		ArrayList<HashTagPrediction> ret = new ArrayList<HashTagPrediction>();
-		Double confidence = 1.0;
-		Double increment = 0.8 / result.size();
-
-		for (String hashtag : result) {
-			HashTagPrediction temp = new HashTagPrediction();
-			temp.hashtag = hashtag;
-			temp.confidence = confidence;
-			confidence = confidence - increment;
-			ret.add(temp);
-		}
-		return ret;
 	}
 
 	@Override
