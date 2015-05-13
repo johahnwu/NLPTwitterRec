@@ -38,10 +38,13 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 			int k) {
 		double posWeight = 0.5;
 		double htfWeight = 0.5;
+		// System.out.println(tweet);
 		List<HashTagPrediction> posHTPredictions = posHTPredictor
 				.predictTopKHashTagsForTweet(tweet, -1);
 		List<HashTagPrediction> htfidhHTPredictions = htfidhHTPredictor
 				.predictTopKHashTagsForTweet(tweet, -1);
+		// Utils.printList("pos", posHTPredictions);
+		// Utils.printList("htfidh", htfidhHTPredictions);
 
 		// add them up
 		List<HashTagPrediction> htfWeightedList = Utils.Weight(

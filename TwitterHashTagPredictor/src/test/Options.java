@@ -17,9 +17,9 @@ import test.EvaluationMethods.EvaluatorOptions;
  *
  */
 public class Options {
-	public String inputFile = "data/randomized_tweets";
+	public String inputFile = "data/randomize_train";
 	public String outputFile = "output/iterative_naive_output.csv";
-	public String testingFile = "data/testing_set";
+	public String testingFile = "data/randomized_test";
 	public EvaluatorOptions evalOptions = EvaluatorOptions.NAIVE;
 	public int numIterations = 10;
 	public int incrementSize = -1;

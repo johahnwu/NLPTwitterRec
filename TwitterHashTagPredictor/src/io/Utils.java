@@ -138,4 +138,12 @@ public class Utils {
 		}
 		return ret;
 	}
+
+	public static <T> void printList(String description, List<T> list) {
+		System.out.print(description + ":[ ");
+		for (T t : list) {
+			System.out.print(t.toString() + ", ");
+		}
+		System.out.println(" ]");
+	}
 }

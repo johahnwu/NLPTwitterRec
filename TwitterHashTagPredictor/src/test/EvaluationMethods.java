@@ -45,6 +45,11 @@ public class EvaluationMethods {
 	public static List<Double> naiveEvaluateCorrectnessWithKPredictions(
 			List<String> predictions, List<String> actual,
 			List<Integer> numPredictionsList) {
+
+		// Utils.printList("predictions", predictions);
+		// Utils.printList("actual", actual);
+		// System.out.println();
+
 		List<Double> evaluationList = new ArrayList<Double>(
 				numPredictionsList.size());
 		// k corresponds to the top K predictions

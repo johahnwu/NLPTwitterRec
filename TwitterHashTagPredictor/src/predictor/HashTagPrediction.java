@@ -16,6 +16,6 @@ public class HashTagPrediction implements Comparable<HashTagPrediction> {
 
 	@Override
 	public String toString() {
-		return "[" + hashtag + ", " + confidence + "]";
+		return String.format("[%s, %.4f]", hashtag, confidence);
 	}
 }
