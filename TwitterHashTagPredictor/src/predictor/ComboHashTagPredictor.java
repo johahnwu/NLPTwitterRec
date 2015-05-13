@@ -36,8 +36,8 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 	@Override
 	public List<HashTagPrediction> predictTopKHashTagsForTweet(String tweet,
 			int k) {
-		double posWeight = 0.4;
-		double htfWeight = 0.6;
+		double posWeight = 0.3;
+		double htfWeight = 0.7;
 		List<HashTagPrediction> posHTPredictions = posHTPredictor
 				.predictTopKHashTagsForTweet(tweet, -1);
 		List<HashTagPrediction> htfidhHTPredictions = htfidhHTPredictor

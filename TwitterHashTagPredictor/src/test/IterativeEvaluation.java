@@ -4,7 +4,6 @@ import io.TweetHashTagTuple;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import predictor.HashTagPredictor;
@@ -31,7 +30,7 @@ public class IterativeEvaluation extends Evaluator {
 					"Set numIterations and trainIncrementSize to positive");
 		}
 
-		Collections.shuffle(trainingCandidates);
+		// Collections.shuffle(trainingCandidates);
 
 		List<TweetHashTagTuple> currentTrainingList = new ArrayList<TweetHashTagTuple>();
 		List<Integer> trainingListSize = new ArrayList<Integer>();
