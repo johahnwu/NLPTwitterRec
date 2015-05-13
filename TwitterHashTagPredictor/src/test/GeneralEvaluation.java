@@ -1,4 +1,4 @@
-package test.pos;
+package test;
 
 import io.TweetHashTagTuple;
 import io.Utils;
@@ -10,14 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import predictor.HashTagPredictor;
-import predictor.POSHashTagPredictor;
-import test.IterativeEvaluation;
-import test.Options;
 
-public class POSIterativeEvaluation {
-	public static void main(String[] args) throws IOException {
-		Options options = new Options(args);
-
+public class GeneralEvaluation {
+	public static void iterativeEvaluation(Options options) throws IOException {
 		System.out.println("Loading training candidates file "
 				+ options.inputFile);
 		List<TweetHashTagTuple> trainingCandidates = Utils
@@ -42,7 +37,7 @@ public class POSIterativeEvaluation {
 			System.out.println("incrementSize " + options.incrementSize);
 			IterativeEvaluation evaluator = new IterativeEvaluation(
 					options.numIterations, options.incrementSize);
-			HashTagPredictor predictor = new POSHashTagPredictor();
+			HashTagPredictor predictor = options.predictor;
 			List<Integer> numPredictions = new ArrayList<Integer>();
 			for (int i = 0; i < 20; i++)
 				numPredictions.add(i);
@@ -51,6 +46,5 @@ public class POSIterativeEvaluation {
 
 			System.out.println("DONE!");
 		}
-
 	}
 }
