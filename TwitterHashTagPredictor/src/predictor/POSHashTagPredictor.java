@@ -99,34 +99,10 @@ public class POSHashTagPredictor implements HashTagPredictor {
 		Map<String, Integer> seenHashTags = new HashMap<String, Integer>();
 		Map<String, Integer> counts = new HashMap<String, Integer>();
 		List<HashTagPrediction> finalPredictions = new ArrayList<HashTagPrediction>();
-		for (HashTagPrediction prediction : hashTagPredictions) {
-			String ht = prediction.hashtag;
-			if (seenHashTags.keySet().contains(ht)) {
-				counts.put(ht, counts.get(ht) + 1);
-				int index = seenHashTags.get(ht);
-				finalPredictions.get(index).confidence += prediction.confidence;
-			} else {
-				seenHashTags.put(ht, finalPredictions.size());
-				counts.put(ht, 1);
-				finalPredictions.add(prediction);
-			}
-		}
-
-		// take the (1+.5 (n-1)count)th root
-		for (HashTagPrediction prediction : hashTagPredictions) {
-			int count = counts.get(prediction.hashtag);
-			double exponent = 1.0 / (count);
-			prediction.confidence = Math.pow(prediction.confidence, exponent);
-		}
-
-		// make the max value 1
-		double maxConfidence = 0.0;
-		for (HashTagPrediction prediction : finalPredictions) {
-			maxConfidence = Math.max(maxConfidence, prediction.confidence);
-		}
-		for (HashTagPrediction prediction : finalPredictions) {
-			prediction.confidence = prediction.confidence / maxConfidence;
-		}
+		PredictorUtils.addInConfidences(finalPredictions, hashTagPredictions,
+				seenHashTags, counts);
+		PredictorUtils.takeCounthRoots(finalPredictions, counts);
+		PredictorUtils.normalize(finalPredictions);
 
 		// sort from highest prob to lowest prob
 		Collections.sort(finalPredictions, Collections.reverseOrder());
