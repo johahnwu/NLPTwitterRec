@@ -55,15 +55,12 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 		List<HashTagPrediction> posWeightedList = Utils.Weight(
 				posHTPredictions, posWeight);
 
-		Map<String, Integer> seenIndex = new HashMap<>();
-		Map<String, Integer> counts = new HashMap<>();
-		List<HashTagPrediction> finalPredictions = new ArrayList<>();
-		PredictorUtils.addInConfidences(finalPredictions, posHTPredictions,
-				seenIndex, counts);
-		PredictorUtils.addInConfidences(finalPredictions, posWeightedList,
-				seenIndex, counts);
+		Map<String, HashTagPrediction> setOfPredictions = new HashMap<>();
+		maxConfidenceForEachHTP(setOfPredictions, htfWeightedList);
+		maxConfidenceForEachHTP(setOfPredictions, posWeightedList);
 
-		PredictorUtils.takeCounthRoots(finalPredictions, counts);
+		List<HashTagPrediction> finalPredictions = new ArrayList<>(
+				setOfPredictions.values());
 		PredictorUtils.normalize(finalPredictions);
 
 		// sort by highest confidence first
@@ -75,6 +72,20 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 		}
 
 		return finalPredictions.subList(0, maxIndex);
+	}
+
+	private void maxConfidenceForEachHTP(Map<String, HashTagPrediction> map,
+			List<HashTagPrediction> toAdd) {
+		for (HashTagPrediction prediction : toAdd) {
+			String ht = prediction.hashtag;
+			if (map.containsKey(ht)) {
+				HashTagPrediction current = map.get(ht);
+				current.confidence = Math.max(current.confidence,
+						prediction.confidence);
+			} else {
+				map.put(ht, prediction);
+			}
+		}
 	}
 
 }
