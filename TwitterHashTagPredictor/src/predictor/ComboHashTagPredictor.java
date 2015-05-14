@@ -67,14 +67,14 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 		PredictorUtils.normalize(finalPredictions);
 
 		// sort by highest confidence first
-		Collections.sort(htfWeightedList, Collections.reverseOrder());
+		Collections.sort(finalPredictions, Collections.reverseOrder());
 		// get the top k results
-		int maxIndex = Math.min(htfWeightedList.size(), DEFAULT_K);
+		int maxIndex = Math.min(finalPredictions.size(), DEFAULT_K);
 		if (k >= 0) {
-			maxIndex = Math.min(htfWeightedList.size(), k);
+			maxIndex = Math.min(finalPredictions.size(), k);
 		}
 
-		return htfWeightedList.subList(0, maxIndex);
+		return finalPredictions.subList(0, maxIndex);
 	}
 
 }
