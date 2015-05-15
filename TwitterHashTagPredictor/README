@@ -8,6 +8,8 @@ java -cp ark-tweet-nlp-0.3.2.jar:bin test/combo/ComboIterativeEvaluation --input
 
 Refer to the condor_files for more examples.
 
+experimentResults.zip contains the results of our experiments
+
 All of the Testing files print out a csv.
 
 In reference to the paper,
