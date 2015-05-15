@@ -1,0 +1,1 @@
+java -cp ark-tweet-nlp-0.3.2.jar:bin test/combo/ComboIterativeEvaluation --inputFile example/random_tweets --testingFile example/random_tweets --outputFile comboNaiveIterative.csv --evalType naive --iterations 10

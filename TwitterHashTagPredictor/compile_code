@@ -1,3 +1,4 @@
 find ./src -name *.java > sources_list.txt
+mkdir bin
 javac -d bin -cp ark-tweet-nlp-0.3.2.jar @sources_list.txt
 rm sources_list.txt

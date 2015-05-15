@@ -3,8 +3,8 @@ To compile:
 
 For datasets: unzip dataSets.tar.gz or something similar
 
-example run:
-java -cp ark-tweet-nlp-0.3.2.jar:bin test/combo/ComboIterativeEvaluation --inputFile data/sixTwelveTraining --testingFile data/sixTwelveTesting --outputFile comboNaiveIterative.csv --evalType naive --iterations 20
+example run: (or do ./example_run)
+java -cp ark-tweet-nlp-0.3.2.jar:bin test/combo/ComboIterativeEvaluation --inputFile data/random_tweets --testingFile data/random_tweets --outputFile comboNaiveIterative.csv --evalType naive --iterations 10
 
 Refer to the condor_files for more examples.
 
