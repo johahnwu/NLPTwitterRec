@@ -1,6 +1,6 @@
 POSHF -- NLPTWitterRec is as a whole is licensed under GPL version 2.
 
-All of the src code we've written -- the files under src/ are licensed under Apache License version 2.0. However, we depend on arktweetnlp which is licensed as GPL. Thus as we undersatnd it, the whole package must be GPL.
+All of the src code we've written -- the files under src/ are licensed under Apache License version 2.0. However, we depend on arktweetnlp which is licensed as GPL. Thus as we understand it, the whole package must be GPL.
 
 
 Twitter4J is licensed under Apache 2.0
