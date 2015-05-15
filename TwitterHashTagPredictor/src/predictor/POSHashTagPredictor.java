@@ -98,10 +98,14 @@ public class POSHashTagPredictor implements HashTagPredictor {
 		// account for duplicate hash tags
 		Map<String, Integer> seenHashTags = new HashMap<String, Integer>();
 		Map<String, Integer> counts = new HashMap<String, Integer>();
-		List<HashTagPrediction> finalPredictions = new ArrayList<HashTagPrediction>();
-		PredictorUtils.addInConfidences(finalPredictions, hashTagPredictions,
-				seenHashTags, counts);
-		PredictorUtils.takeCounthRoots(finalPredictions, counts);
+		// PredictorUtils.addInConfidences(finalPredictions, hashTagPredictions,
+		// seenHashTags, counts);
+		// PredictorUtils.takeCounthRoots(finalPredictions, counts);
+		Map<String, HashTagPrediction> maxConfidences = new HashMap<String, HashTagPrediction>();
+		PredictorUtils.maxConfidenceForEachHTP(maxConfidences,
+				hashTagPredictions);
+		List<HashTagPrediction> finalPredictions = new ArrayList<HashTagPrediction>(
+				maxConfidences.values());
 		PredictorUtils.normalize(finalPredictions);
 
 		// sort from highest prob to lowest prob

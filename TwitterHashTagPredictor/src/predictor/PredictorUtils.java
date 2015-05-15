@@ -62,4 +62,18 @@ public class PredictorUtils {
 			prediction.confidence = prediction.confidence / maxConfidence;
 		}
 	}
+
+	public static void maxConfidenceForEachHTP(
+			Map<String, HashTagPrediction> map, List<HashTagPrediction> toAdd) {
+		for (HashTagPrediction prediction : toAdd) {
+			String ht = prediction.hashtag;
+			if (map.containsKey(ht)) {
+				HashTagPrediction current = map.get(ht);
+				current.confidence = Math.max(current.confidence,
+						prediction.confidence);
+			} else {
+				map.put(ht, prediction);
+			}
+		}
+	}
 }

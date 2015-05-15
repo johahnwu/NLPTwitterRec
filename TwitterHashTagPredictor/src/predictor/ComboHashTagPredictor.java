@@ -56,8 +56,10 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 				posHTPredictions, posWeight);
 
 		Map<String, HashTagPrediction> setOfPredictions = new HashMap<>();
-		maxConfidenceForEachHTP(setOfPredictions, htfWeightedList);
-		maxConfidenceForEachHTP(setOfPredictions, posWeightedList);
+		PredictorUtils.maxConfidenceForEachHTP(setOfPredictions,
+				htfWeightedList);
+		PredictorUtils.maxConfidenceForEachHTP(setOfPredictions,
+				posWeightedList);
 
 		List<HashTagPrediction> finalPredictions = new ArrayList<>(
 				setOfPredictions.values());
@@ -72,20 +74,6 @@ public class ComboHashTagPredictor implements HashTagPredictor {
 		}
 
 		return finalPredictions.subList(0, maxIndex);
-	}
-
-	private void maxConfidenceForEachHTP(Map<String, HashTagPrediction> map,
-			List<HashTagPrediction> toAdd) {
-		for (HashTagPrediction prediction : toAdd) {
-			String ht = prediction.hashtag;
-			if (map.containsKey(ht)) {
-				HashTagPrediction current = map.get(ht);
-				current.confidence = Math.max(current.confidence,
-						prediction.confidence);
-			} else {
-				map.put(ht, prediction);
-			}
-		}
 	}
 
 }
