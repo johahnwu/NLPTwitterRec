@@ -16,6 +16,12 @@ POS refers to POSHashTagPredictor
 HF refers to HTFIDHHashTagPredictor
 HF-IHU refers to HFIHUHashTagPredictor
 
+IMPORTANT!!!! For input, the files must be in the format:
+tweet_Text ### hashtag1 hashtag2 etc
+tweet_Text ### hashtag1 hashtag2 etc
+tweet_Text ### hashtag1 hashtag2 etc
+tweet_Text ### hashtag1 hashtag2 etc
+
 TwitterPOSTagger automatically loads in a language model /models/model.ritter_ptb_alldata_fixed.20130723
 If the file doesn't exist, download it from the CMU NLP Arktweet website, or specify a different file in the constructor.
 
