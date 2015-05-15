@@ -1,0 +1,19 @@
+universe = vanilla
+environment = CLASSPATH=/u/mjlau/CS388/NLPTwitterRec/TwitterScraper/twitter4j-core-4.0.3.jar:/u/mjlau/CS388/NLPTwitterRec/TwitterScraper/twitter4j-stream-4.0.3.jar:/u/mjlau/CS388/NLPTwitterRec/TwitterScraper/bin
+
+Initialdir = /u/mjlau/CS388/NLPTwitterRec/TwitterScraper
+executable = /u/mjlau/Documents/jdk1.8.0_40/bin/java
+
++Group = "GRAD"
++Project = "INSTRUCTIONAL"
++ProjectDescription = "CS388 Final Project"
+
+Log = /u/mjlau/CS388/NLPTwitterRec/TwitterScraper/log/experiment4.log
+
+Notification = complete
+Notify_user = mjlau0@gmail.com
+
+Arguments = "Search --inputFile /u/mjlau/CS388/NLPTwitterRec/TwitterScraper/dictionary/six12ChosenWords --outputFile /u/mjlau/CS388/NLPTwitterRec/TwitterScraper/data/sixTwelveSearchedHashTags"
+Output = /u/mjlau/CS388/NLPTwitterRec/TwitterScraper/log/experiment4.out
+Error = /u/mjlau/CS388/NLPTwitterRec/TwitterScraper/log/experiment4.err
+Queue

@@ -1,0 +1,19 @@
+universe = vanilla
+environment = CLASSPATH=/u/mjlau/CS388/NLPTwitterRec/TwitterHashTagPredictor/ark-tweet-nlp-0.3.2.jar:/u/mjlau/CS388/NLPTwitterRec/TwitterHashTagPredictor/bin
+
+Initialdir = /u/mjlau/CS388/NLPTwitterRec/TwitterHashTagPredictor
+executable = /u/mjlau/Documents/jdk1.8.0_40/bin/java
+
++Group = "GRAD"
++Project = "INSTRUCTIONAL"
++ProjectDescription = "CS388 Final Project"
+
+Log = log/naive/iter/otsuka.log
+
+Notification = complete
+Notify_user = mjlau0@gmail.com
+
+Arguments = "test.otsuka.OtsukaIterativeEvaluation --inputFile data/sixTwelveTraining --testingFile data/sixTwelveTesting --outputFile output/naive/iter/otsukaIterativeRecallSixTwelve.csv --evalType naive --iterations 20"
+Output = log/naive/iter/otsuka.out
+Error = log/naive/iter/otsuka.err
+Queue

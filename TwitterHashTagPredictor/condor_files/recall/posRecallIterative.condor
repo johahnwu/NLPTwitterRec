@@ -1,0 +1,19 @@
+universe = vanilla
+environment = CLASSPATH=/u/mjlau/CS388/NLPTwitterRec/TwitterHashTagPredictor/ark-tweet-nlp-0.3.2.jar:/u/mjlau/CS388/NLPTwitterRec/TwitterHashTagPredictor/bin
+
+Initialdir = /u/mjlau/CS388/NLPTwitterRec/TwitterHashTagPredictor
+executable = /u/mjlau/Documents/jdk1.8.0_40/bin/java
+
++Group = "GRAD"
++Project = "INSTRUCTIONAL"
++ProjectDescription = "CS388 Final Project"
+
+Log = log/recall/iter/pos.log
+
+Notification = complete
+Notify_user = mjlau0@gmail.com
+
+Arguments = "test.pos.POSIterativeEvaluation --inputFile data/sixTwelveTraining --testingFile data/sixTwelveTesting --outputFile output/recall/iter/posIterativeRecallSixTwelve.csv --evalType recall --iterations 100 --incrementSize 1"
+Output = log/recall/iter/pos.out
+Error = log/recall/iter/pos.err
+Queue

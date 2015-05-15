@@ -1,5 +1,24 @@
 To compile:
 ./compile_code
 
+For datasets: unzip dataSets.tar.gz or something similar
+
 example run:
-java -cp ark-tweet-nlp-0.3.2.jar:bin pos/tagger/TwitterPOSTagger inputFile examples/example_tweets.txt --outputFile random_output
+java -cp ark-tweet-nlp-0.3.2.jar:bin test/combo/ComboIterativeEvaluation --inputFile data/sixTwelveTraining --testingFile data/sixTwelveTesting --outputFile comboNaiveIterative.csv --evalType naive --iterations 20
+
+Refer to the condor_files for more examples.
+
+All of the Testing files print out a csv.
+
+In reference to the paper,
+POSHF refers to ComboHashTagPredictor
+POS refers to POSHashTagPredictor
+HF refers to HTFIDHHashTagPredictor
+HF-IHU refers to HFIHUHashTagPredictor
+
+TwitterPOSTagger automatically loads in a language model /models/model.ritter_ptb_alldata_fixed.20130723
+If the file doesn't exist, download it from the CMU NLP Arktweet website, or specify a different file in the constructor.
+
+POSPredictionModel automatically loads in a POS-model /models/pos_normalmodel
+If the file doesn't exist, specify a new one, or create one using POSPredictionTrainer
+
